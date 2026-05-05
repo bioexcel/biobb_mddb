@@ -1,7 +1,0 @@
-properties:
-  binary_path: /opt/conda/bin/zip
-  boolean_property: false
-  container_image: bioexcel-zip_container-master-latest.simg
-  container_path: singularity
-  container_volume_path: /tmp
-  remove_tmp: false

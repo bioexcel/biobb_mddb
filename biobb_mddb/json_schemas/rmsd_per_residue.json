@@ -1,0 +1,164 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_mddb/json_schemas/1.0/rmsd_per_residue",
+    "name": "biobb_mddb RmsdPerResidue",
+    "title": "Wrapper of the RMSD per residue analysis from MDDB workflow module.",
+    "description": "Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "MDDB Workflow",
+            "version": ">=0.1.10",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_topology_filepath",
+        "input_trajectory_filepath",
+        "output_analysis_filepath"
+    ],
+    "properties": {
+        "input_topology_filepath": {
+            "type": "string",
+            "description": "Input topology or structure file",
+            "filetype": "input",
+            "sample": "https://urlto.sample",
+            "enum": [
+                ".*\\.pdb$",
+                ".*\\.gro$",
+                ".*\\.prmtop$",
+                ".*\\.top$",
+                ".*\\.itp$",
+                ".*\\.tpr$",
+                ".*\\.psf$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_1476)"
+                },
+                {
+                    "extension": ".*\\.gro$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_2033)"
+                },
+                {
+                    "extension": ".*\\.prmtop$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_3881)"
+                },
+                {
+                    "extension": ".*\\.top$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_3880)"
+                },
+                {
+                    "extension": ".*\\.itp$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_3883)"
+                },
+                {
+                    "extension": ".*\\.tpr$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_2333)"
+                },
+                {
+                    "extension": ".*\\.psf$",
+                    "description": "Input topology or structure file",
+                    "(edam": "format_3882)"
+                }
+            ]
+        },
+        "input_trajectory_filepath": {
+            "type": "string",
+            "description": "Input trajectory file",
+            "filetype": "input",
+            "sample": "https://urlto.sample",
+            "enum": [
+                ".*\\.xtc$",
+                ".*\\.trr$",
+                ".*\\.dcd$",
+                ".*\\.nc$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.xtc$",
+                    "description": "Input trajectory file",
+                    "(edam": "format_3875)"
+                },
+                {
+                    "extension": ".*\\.trr$",
+                    "description": "Input trajectory file",
+                    "(edam": "format_3910)"
+                },
+                {
+                    "extension": ".*\\.dcd$",
+                    "description": "Input trajectory file",
+                    "(edam": "format_3878)"
+                },
+                {
+                    "extension": ".*\\.nc$",
+                    "description": "Input trajectory file",
+                    "(edam": "format_3650)"
+                }
+            ]
+        },
+        "output_analysis_filepath": {
+            "type": "string",
+            "description": "Analysis results file",
+            "filetype": "output",
+            "sample": "https://urlto.sample",
+            "enum": [
+                ".*\\.json$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "Analysis results file",
+                    "(edam": "format_3464)"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "skip_processing": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Do not process input files, assuming they were already processed."
+                },
+                "binary_path": {
+                    "type": "string",
+                    "default": "mwf",
+                    "wf_prop": false,
+                    "description": "Example of executable binary property."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -12,10 +12,10 @@ build:
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
-   configuration: biobb_template/docs/source/conf.py
+   configuration: biobb_mddb/docs/source/conf.py
 
 python:
   install:
-    - requirements: biobb_template/docs/requirements.txt
+    - requirements: biobb_mddb/docs/requirements.txt
     - method: pip
       path: .

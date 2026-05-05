@@ -17,13 +17,13 @@ setuptools.setup(
         "Documentation": "http://biobb-mddb.readthedocs.io/en/latest/",
         "Bioexcel": "https://bioexcel.eu/"
     },
-    packages=setuptools.find_packages(exclude=['adapters', 'docs', 'test']),
+    packages=setuptools.find_packages(exclude=['docs', 'test']),
     package_data={'biobb_mddb': ['py.typed']},
-    install_requires=['biobb_common==5.2.0'],
+    install_requires=['biobb_common==5.2.2'],
     python_requires='>=3.10',
     entry_points={
         "console_scripts": [
-            "workflow = biobb_mddb.workflow.workflow:main"
+            "rmsd_per_residue = biobb_mddb.workflow.rmsd_per_residue:main"
         ]
     },
     classifiers=(

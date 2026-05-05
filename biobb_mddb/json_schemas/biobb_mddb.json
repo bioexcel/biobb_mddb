@@ -1,0 +1,31 @@
+{
+    "_id": "biobb_mddb",
+    "desc": "Biobb_mddb is a set of tools to work with MD simulations for and from MDDB sources.",
+    "github": "https://github.com/bioexcel/biobb_mddb",
+    "readthedocs": "https://biobb-mddb.readthedocs.io/en/latest/",
+    "conda": "https://anaconda.org/bioconda/biobb_mddb",
+    "docker": "https://quay.io/biocontainers/biobb_mddb:5.2.0--pyhdfd78af_0",
+    "singularity": "https://depot.galaxyproject.org/singularity/biobb_mddb:5.2.0--pyhdfd78af_0",
+    "version": "5.2.0",
+    "tools" : [
+        {
+            "block" : "RmsdPerResidue", 
+            "tool" : "MDDB workflow", 
+            "desc" : "Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.",
+            "exec" : "rmsd_per_residue",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rmsd_per_residue"
+        }
+    ],
+    "dep_pypi" : [
+        "install_requires=['biobb_common==5.2.2']", 
+        "python_requires='>=3.10'"
+    ], 
+    "dep_conda" : [
+        "python >=3.10", 
+        "biobb_common ==5.2.2"
+    ],
+    "keywords" : [
+        "mddb",
+        "keywords"
+    ]
+}

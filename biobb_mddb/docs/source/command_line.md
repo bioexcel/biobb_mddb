@@ -1,4 +1,4 @@
-# BioBB TEMPLATE Command Line Help
+# BioBB MDDB Command Line Help
 Generic usage:
 ```python
 biobb_command [-h] --config CONFIG --input_file(s) <input_file(s)> --output_file <output_file>
@@ -6,147 +6,68 @@ biobb_command [-h] --config CONFIG --input_file(s) <input_file(s)> --output_file
 -----------------
 
 
-## Template
-Short description for the template module in Restructured Text (reST) syntax. Mandatory.
+## Rmsd_per_residue
+Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.
 ### Get help
 Command:
 ```python
-template -h
+rmsd_per_residue -h
 ```
-    usage: template [-h] [-c CONFIG] --input_file_path1 INPUT_FILE_PATH1 [--input_file_path2 INPUT_FILE_PATH2] -o OUTPUT_FILE_PATH
+    usage: rmsd_per_residue [-h] [-c CONFIG] --input_topology_filepath INPUT_TOPOLOGY_FILEPATH --input_trajectory_filepath INPUT_TRAJECTORY_FILEPATH -o OUTPUT_ANALYSIS_FILEPATH
     
-    Description for the template module.
+    RMSD per residue using the MDDB workflow.
     
     options:
       -h, --help            show this help message and exit
       -c CONFIG, --config CONFIG
                             This file can be a YAML file, JSON file or JSON string
-      --input_file_path2 INPUT_FILE_PATH2
-                            Description for the second input file path (optional). Accepted formats: dcd.
     
     required arguments:
-      --input_file_path1 INPUT_FILE_PATH1
-                            Description for the first input file path. Accepted formats: top.
-      -o OUTPUT_FILE_PATH, --output_file_path OUTPUT_FILE_PATH
-                            Description for the output file path. Accepted formats: zip.
+      --input_topology_filepath INPUT_TOPOLOGY_FILEPATH
+                            Input topology or structure file. Accepted formats: pdb, gro, prmtop, top, itp, tpr, psf.
+      --input_trajectory_filepath INPUT_TRAJECTORY_FILEPATH
+                            Input trajectory file. Accepted formats: xtc, trr, dcd, nc.
+      -o OUTPUT_ANALYSIS_FILEPATH, --output_analysis_filepath OUTPUT_ANALYSIS_FILEPATH
+                            Analysis results file. Accepted formats: json.
 ### I / O Arguments
 Syntax: input_argument (datatype) : Definition
 
 Config input / output arguments for this building block:
-* **input_file_path1** (*string*): Description for the first input file path. File type: input. [Sample file](https://urlto.sample). Accepted formats: TOP
-* **input_file_path2** (*string*): Description for the second input file path (optional). File type: input. [Sample file](https://urlto.sample). Accepted formats: DCD
-* **output_file_path** (*string*): Description for the output file path. File type: output. [Sample file](https://urlto.sample). Accepted formats: ZIP
+* **input_topology_filepath** (*string*): Input topology or structure file. File type: input. [Sample file](https://urlto.sample). Accepted formats: PDB, GRO, PRMTOP, TOP, ITP, TPR, PSF
+* **input_trajectory_filepath** (*string*): Input trajectory file. File type: input. [Sample file](https://urlto.sample). Accepted formats: XTC, TRR, DCD, NC
+* **output_analysis_filepath** (*string*): Analysis results file. File type: output. [Sample file](https://urlto.sample). Accepted formats: JSON
 ### Config
 Syntax: input_parameter (datatype) - (default_value) Definition
 
 Config parameters for this building block:
-* **boolean_property** (*boolean*): (True) Example of boolean property..
-* **binary_path** (*string*): (zip) Example of executable binary property..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
+* **skip_processing** (*boolean*): (False) Do not process input files, assuming they were already processed.
+* **binary_path** (*string*): (mwf) Example of executable binary property.
+* **remove_tmp** (*boolean*): (True) Remove temporal files.
+* **restart** (*boolean*): (False) Do not execute if output files exist.
+* **sandbox_path** (*string*): (./) Parent path to the sandbox directory.
 ### YAML
-#### [Common config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template.yml)
+#### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsd_per_residue.yml)
 ```python
 properties:
-  boolean_property: false
   remove_tmp: true
-
-```
-#### [Docker config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template_docker.yml)
-```python
-properties:
-  boolean_property: false
-  container_image: mmbirb/zip:latest
-  container_path: docker
-  container_volume_path: /tmp
-  remove_tmp: true
-
-```
-#### [Singularity config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template_singularity.yml)
-```python
-properties:
-  binary_path: /opt/conda/bin/zip
-  boolean_property: false
-  container_image: bioexcel-zip_container-master-latest.simg
-  container_path: singularity
-  container_volume_path: /tmp
-  remove_tmp: false
+  skip_processing: false
 
 ```
 #### Command line
 ```python
-template --config config_template.yml --input_file_path1 urlto.sample --input_file_path2 urlto.sample --output_file_path urlto.sample
+rmsd_per_residue --config config_rmsd_per_residue.yml --input_topology_filepath urlto.sample --input_trajectory_filepath urlto.sample --output_analysis_filepath urlto.sample
 ```
 ### JSON
-#### [Common config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template.json)
+#### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsd_per_residue.json)
 ```python
 {
   "properties": {
-    "boolean_property": false,
+    "skip_processing": false,
     "remove_tmp": true
   }
 }
 ```
-#### [Docker config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template_docker.json)
-```python
-{
-  "properties": {
-    "boolean_property": false,
-    "remove_tmp": true,
-    "container_path": "docker",
-    "container_image": "mmbirb/zip:latest",
-    "container_volume_path": "/tmp"
-  }
-}
-```
-#### [Singularity config file](https://github.com/bioexcel/biobb_template/blob/master/biobb_template/test/data/config/config_template_singularity.json)
-```python
-{
-  "properties": {
-    "boolean_property": false,
-    "remove_tmp": false,
-    "binary_path": "/opt/conda/bin/zip",
-    "container_path": "singularity",
-    "container_image": "bioexcel-zip_container-master-latest.simg",
-    "container_volume_path": "/tmp"
-  }
-}
-```
 #### Command line
 ```python
-template --config config_template.json --input_file_path1 urlto.sample --input_file_path2 urlto.sample --output_file_path urlto.sample
+rmsd_per_residue --config config_rmsd_per_residue.json --input_topology_filepath urlto.sample --input_trajectory_filepath urlto.sample --output_analysis_filepath urlto.sample
 ```
-
-## Template_container
-Short description for the template container module in Restructured Text (reST) syntax. Mandatory.
-### Get help
-Command:
-```python
-template_container -h
-```
-    /bin/sh: 1: template_container: not found
-### I / O Arguments
-Syntax: input_argument (datatype) : Definition
-
-Config input / output arguments for this building block:
-* **input_file_path1** (*string*): Description for the first input file path. File type: input. [Sample file](https://urlto.sample). Accepted formats: TOP
-* **input_file_path2** (*string*): Description for the second input file path (optional). File type: input. [Sample file](https://urlto.sample). Accepted formats: DCD
-* **output_file_path** (*string*): Description for the output file path. File type: output. [Sample file](https://urlto.sample). Accepted formats: ZIP
-### Config
-Syntax: input_parameter (datatype) - (default_value) Definition
-
-Config parameters for this building block:
-* **boolean_property** (*boolean*): (True) Example of boolean property..
-* **binary_path** (*string*): (zip) Example of executable binary property..
-* **remove_tmp** (*boolean*): (True) Remove temporal files..
-* **restart** (*boolean*): (False) Do not execute if output files exist..
-* **sandbox_path** (*string*): (./) Parent path to the sandbox directory..
-* **container_path** (*string*): (None) Container path definition..
-* **container_image** (*string*): (mmbirb/zip:latest) Container image definition..
-* **container_volume_path** (*string*): (/tmp) Container volume path definition..
-* **container_working_dir** (*string*): (None) Container working directory definition..
-* **container_user_id** (*string*): (None) Container user_id definition..
-* **container_shell_path** (*string*): (/bin/bash) Path to default shell inside the container..
-### YAML
-### JSON

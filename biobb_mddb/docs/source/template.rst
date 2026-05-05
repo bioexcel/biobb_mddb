@@ -1,21 +1,21 @@
-template package
+workflow package
 =====================
 
 Submodules
 ----------
 
-template.template module
+workflow.rmsd_per_residue module
 ------------------------
 
-.. automodule:: template.template
-    :members:
+.. automodule:: workflow.rmsd_per_residue
+
     :undoc-members:
     :show-inheritance:
 
-template.template_container module
-----------------------------------
+.. template.template_container module
+.. ----------------------------------
 
-.. automodule:: template.template_container
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. .. automodule:: template.template_container
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:

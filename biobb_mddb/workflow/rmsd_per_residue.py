@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module containing the Template class and the command line interface."""
+"""Module containing the RmsdPerResidue class and the command line interface."""
 from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
@@ -12,10 +12,11 @@ from shutil import move
 class RmsdPerResidue(BiobbObject):
     """
     | biobb_mddb RmsdPerResidue
-    | A workflow to process raw MD data into a MDDB-standarized format and run different quality control analyses.
+    | Wrapper of the `RMSD per residue analysis from MDDB workflow <https://github.com/mmb-irb/MDDB-workflow/blob/master/mddb_workflow/analyses/rmsd_per_residue.py>`_ module.
+    | Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.
 
     Args:
-        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: pdb (edam:format_1476), gro (edam not found), prmtop (edam:format_3881), top (edam:format_3880) + itp (edam:format_3883), tpr (edam not found), psf (edam:format_3882).
+        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).
         input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).
         output_analysis_filepath (str): Analysis results file. File type: output. `Sample file <https://urlto.sample>`_. Accepted formats: json (edam:format_3464).
         properties (dic):
@@ -40,7 +41,7 @@ class RmsdPerResidue(BiobbObject):
         * wrapped_software:
             * name: MDDB Workflow
             * version: >=0.1.10
-            * license: Apache License 2.0
+            * license: Apache-2.0
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl
