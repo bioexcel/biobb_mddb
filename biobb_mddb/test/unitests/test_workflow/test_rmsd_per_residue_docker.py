@@ -2,9 +2,9 @@ from biobb_common.tools import test_fixtures as fx
 from biobb_mddb.workflow.rmsd_per_residue import rmsd_per_residue
 
 
-class TestRmsdPerResidue():
+class TestRmsdPerResidueDocker():
     def setup_class(self):
-        fx.test_setup(self, 'rmsd_per_residue')
+        fx.test_setup(self, 'rmsd_per_residue_docker')
 
     def teardown_class(self):
         fx.test_teardown(self)

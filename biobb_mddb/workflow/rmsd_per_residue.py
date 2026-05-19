@@ -7,7 +7,7 @@ from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
 
 from os.path import exists
-from shutil import move
+from shutil import copy, move
 
 class RmsdPerResidue(BiobbObject):
     """
@@ -16,22 +16,28 @@ class RmsdPerResidue(BiobbObject):
     | Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.
 
     Args:
-        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).
-        input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file <https://urlto.sample>`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).
-        output_analysis_filepath (str): Analysis results file. File type: output. `Sample file <https://urlto.sample>`_. Accepted formats: json (edam:format_3464).
+        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/topology.top>`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).
+        input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/trajectory.dcd>`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).
+        output_analysis_filepath (str): Analysis results file. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/mda.rmsd_perres.json>`_. Accepted formats: json (edam:format_3464).
         properties (dic):
             * **skip_processing** (*bool*) - (False) Do not process input files, assuming they were already processed.
             * **binary_path** (*str*) - ("mwf") Example of executable binary property.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
+            * **container_path** (*str*) - (None)  Path to the binary executable of your container.
+            * **container_image** (*str*) - ("mddb/mddb:latest") Container Image identifier.
+            * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
+            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
+            * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
+            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
 
     Examples:
         This is a use example of how to use the building block from Python::
 
             from biobb_mddb.workflow.workflow import rmsd_per_residue
 
-            prop = { 'boolean_property': False }
+            prop = { 'skip_processing': False }
             rmsd_per_residue(input_topology_filepath='/path/to/my_topology.prmtop',
                     input_trajectory_filepath='/path/to/my_trajectory.dcd',
                     output_analysis_filepath='/path/to/results.json',
@@ -48,16 +54,15 @@ class RmsdPerResidue(BiobbObject):
 
     """
 
-    # 2. Adapt input and output file paths as required. Include all files, even optional ones
     def __init__(self, input_topology_filepath : str, input_trajectory_filepath : str,
             output_analysis_filepath : str, properties=None, **kwargs) -> None:
         properties = properties or {}
 
-        # 2.0 Call parent class constructor
+        # Call parent class constructor
         super().__init__(properties)
         self.locals_var_dict = locals().copy()
 
-        # 2.1 Modify to match constructor parameters
+        # Modify to match constructor parameters
         # Input/Output files
         self.io_dict = {
             'in': {
@@ -68,9 +73,6 @@ class RmsdPerResidue(BiobbObject):
                 'output_analysis_filepath': output_analysis_filepath,
             }
         }
-
-        # 3. Include all relevant properties here as
-        # self.property_name = properties.get('property_name', property_default_value)
 
         # Properties specific for BB
         self.skip_processing = properties.get('skip_processing', False)
@@ -86,7 +88,7 @@ class RmsdPerResidue(BiobbObject):
     def launch(self) -> int:
         """Execute the :class:`RmsdPerResidue <workflow.rmsd_per_residue.RmsdPerResidue>` object."""
 
-        # 4. Setup Biobb
+        # Setup Biobb
         if self.check_restart():
             return 0
         self.stage_files()
@@ -98,19 +100,36 @@ class RmsdPerResidue(BiobbObject):
         input_topology_filepath = str(PurePath(tmp_folder).joinpath(PurePath(self.io_dict['in']['input_topology_filepath']).name))
         input_trajectory_filepath = str(PurePath(tmp_folder).joinpath(PurePath(self.io_dict['in']['input_trajectory_filepath']).name))
 
-        # 6. Prepare the command line parameters as instructions list
+        # If we are running inside a container then copy input files inside the container
+        if self.container_path:
+            def move_to_container (input_filepath : str) -> str:
+                copy(
+                    input_filepath,
+                    PurePath(str(self.stage_io_dict.get("unique_dir", ""))).joinpath(
+                        PurePath(input_filepath).name
+                    ),
+                )
+                return str(
+                    PurePath(self.container_volume_path).joinpath(
+                        PurePath(input_filepath).name
+                    ),
+                )
+            input_topology_filepath = move_to_container(input_topology_filepath)
+            input_trajectory_filepath = move_to_container(input_trajectory_filepath)
+
+        # Prepare the command line parameters as instructions list
         instructions = []
         if self.skip_processing:
             instructions.append('--faith')
             fu.log('Appending optional boolean property', self.out_log, self.global_log)
 
-        # 7. Build the actual command line as a list of items (elements order will be maintained)
+        # Build the actual command line as a list of items (elements order will be maintained)
         replica_subdirectory = 'replica_1'
         self.cmd = [(f'{self.binary_path} run -i perres -top {input_topology_filepath} ' + \
             f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
 
-        # 9. Uncomment to check the command line
+        # Uncomment to check the command line
         print(' '.join(self.cmd))
 
         # Run Biobb block
@@ -127,6 +146,16 @@ class RmsdPerResidue(BiobbObject):
         # Move the output analysis file to the requested output filepath
         output_analysis_filepath = self.io_dict['out']['output_analysis_filepath']
         move(expected_output_filepath, output_analysis_filepath)
+
+        # If we are running inside a container then get the paths for output files outside the container
+        if self.container_path:
+            def move_from_container (output_filepath : str) -> str:
+                return str(
+                    PurePath(str(self.stage_io_dict.get("unique_dir", ""))).joinpath(
+                        PurePath(output_filepath).name
+                    )
+                )
+            output_analysis_filepath = move_from_container(output_analysis_filepath)
 
         # Remove temporary file(s)
         self.remove_tmp_files()
