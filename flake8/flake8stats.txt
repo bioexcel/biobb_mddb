@@ -1,0 +1,7 @@
+1     E125 continuation line with same indent as next logical line
+2     E128 continuation line under-indented for visual indent
+8     E203 whitespace before ':'
+3     E211 whitespace before '('
+1     E302 expected 2 blank lines, found 1
+1     E502 the backslash is redundant between brackets
+1     W292 no newline at end of file
