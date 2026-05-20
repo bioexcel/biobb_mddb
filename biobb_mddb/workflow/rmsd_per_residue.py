@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
 """Module containing the RmsdPerResidue class and the command line interface."""
-from pathlib import PurePath
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
+import shutil
 
-from os.path import exists
-from shutil import copy, move
 
 class RmsdPerResidue(BiobbObject):
     """
@@ -54,8 +52,8 @@ class RmsdPerResidue(BiobbObject):
 
     """
 
-    def __init__(self, input_topology_filepath : str, input_trajectory_filepath : str,
-            output_analysis_filepath : str, properties=None, **kwargs) -> None:
+    def __init__(self, input_topology_filepath: str, input_trajectory_filepath: str,
+                 output_analysis_filepath: str, properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -93,29 +91,9 @@ class RmsdPerResidue(BiobbObject):
             return 0
         self.stage_files()
 
-        # Creating temporary folder
-        tmp_folder = self.stage_io_dict.get("unique_dir", "")
-
         # Parse filepaths
-        input_topology_filepath = str(PurePath(tmp_folder).joinpath(PurePath(self.io_dict['in']['input_topology_filepath']).name))
-        input_trajectory_filepath = str(PurePath(tmp_folder).joinpath(PurePath(self.io_dict['in']['input_trajectory_filepath']).name))
-
-        # If we are running inside a container then copy input files inside the container
-        if self.container_path:
-            def move_to_container (input_filepath : str) -> str:
-                copy(
-                    input_filepath,
-                    PurePath(str(self.stage_io_dict.get("unique_dir", ""))).joinpath(
-                        PurePath(input_filepath).name
-                    ),
-                )
-                return str(
-                    PurePath(self.container_volume_path).joinpath(
-                        PurePath(input_filepath).name
-                    ),
-                )
-            input_topology_filepath = move_to_container(input_topology_filepath)
-            input_trajectory_filepath = move_to_container(input_trajectory_filepath)
+        input_topology_filepath = self.stage_io_dict['in']['input_topology_filepath']
+        input_trajectory_filepath = self.stage_io_dict['in']['input_trajectory_filepath']
 
         # Prepare the command line parameters as instructions list
         instructions = []
@@ -125,37 +103,20 @@ class RmsdPerResidue(BiobbObject):
 
         # Build the actual command line as a list of items (elements order will be maintained)
         replica_subdirectory = 'replica_1'
-        self.cmd = [(f'{self.binary_path} run -i perres -top {input_topology_filepath} ' + \
-            f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
+        expected_output_filepath = replica_subdirectory + '/perres/mda.rmsd_perres.json'
+        self.cmd = [(f'{self.binary_path} run -i perres -top {input_topology_filepath} '
+                     f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
+        if self.container_path:
+            self.cmd.extend([f'; mv {expected_output_filepath} {self.container_volume_path}/mda.rmsd_perres.json'])
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
-
-        # Uncomment to check the command line
-        print(' '.join(self.cmd))
 
         # Run Biobb block
         self.run_biobb()
-
+        if not self.container_path:
+            # Move output file to the expected location
+            shutil.move(expected_output_filepath, self.stage_io_dict['out']['output_analysis_filepath'])
         # Copy files to host
         self.copy_to_host()
-
-        # Make sure the expected output exists internally
-        expected_output_filepath = str(PurePath(replica_subdirectory).joinpath(PurePath('perres/mda.rmsd_perres.json')))
-        if not exists(expected_output_filepath):
-            print(f'Expected output file {expected_output_filepath} is missing')
-            return 1
-        # Move the output analysis file to the requested output filepath
-        output_analysis_filepath = self.io_dict['out']['output_analysis_filepath']
-        move(expected_output_filepath, output_analysis_filepath)
-
-        # If we are running inside a container then get the paths for output files outside the container
-        if self.container_path:
-            def move_from_container (output_filepath : str) -> str:
-                return str(
-                    PurePath(str(self.stage_io_dict.get("unique_dir", ""))).joinpath(
-                        PurePath(output_filepath).name
-                    )
-                )
-            output_analysis_filepath = move_from_container(output_analysis_filepath)
 
         # Remove temporary file(s)
         self.remove_tmp_files()
@@ -166,11 +127,9 @@ class RmsdPerResidue(BiobbObject):
         return self.return_code
 
 
-def rmsd_per_residue (
-    input_trajectory_filepath : str,
-    input_topology_filepath : str = None,
-    output_analysis_filepath : str = None,
-    **kwargs) -> int:
+def rmsd_per_residue(input_trajectory_filepath: str, input_topology_filepath: str = None,
+                     output_analysis_filepath: str = None, properties: dict | None = None,
+                     **kwargs) -> int:
     """Create :class:`Workflow <workflow.rmsd_per_residue.RmsdPerResidue>` class and
     execute the :meth:`launch() <workflow.rmsd_per_residue.RmsdPerResidue.launch>` method."""
     return RmsdPerResidue(**dict(locals())).launch()
