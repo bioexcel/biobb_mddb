@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="index.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.0">coverage.py v7.14.0</a>,
-            created at 2026-05-20 15:41 +0000
+            created at 2026-05-20 15:42 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -186,10 +186,10 @@
     <p class="pln"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">        <span class="com"># Build the actual command line as a list of items (elements order will be maintained)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="nam">replica_subdirectory</span> <span class="op">=</span> <span class="str">'replica_1'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">        <span class="nam">expected_output_filepath</span> <span class="op">=</span> <span class="nam">replica_subdirectory</span> <span class="op">+</span> <span class="str">'/perres/mda.rmsd_perres.json'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">cmd</span> <span class="op">=</span> <span class="op">[</span><span class="op">(</span><span class="fst">f'</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">binary_path</span><span class="op">}</span><span class="fst"> run -i perres -top </span><span class="op">{</span><span class="nam">input_topology_filepath</span><span class="op">}</span><span class="fst"> </span><span class="fst">'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">                     <span class="fst">f'</span><span class="fst">-md </span><span class="op">{</span><span class="nam">replica_subdirectory</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">input_trajectory_filepath</span><span class="op">}</span><span class="fst">'</span><span class="op">)</span><span class="op">,</span> <span class="op">*</span><span class="nam">instructions</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">cmd</span> <span class="op">=</span> <span class="op">[</span><span class="op">(</span><span class="str">f'{self.binary_path} run -i perres -top {input_topology_filepath} '</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">                     <span class="str">f'-md {replica_subdirectory} {input_trajectory_filepath}'</span><span class="op">)</span><span class="op">,</span> <span class="op">*</span><span class="nam">instructions</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t109" href="#t109">109</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">container_path</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t110" href="#t110">110</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">cmd</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span><span class="op">[</span><span class="fst">f'</span><span class="fst">; mv </span><span class="op">{</span><span class="nam">expected_output_filepath</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">container_volume_path</span><span class="op">}</span><span class="fst">/mda.rmsd_perres.json</span><span class="fst">'</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t110" href="#t110">110</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">cmd</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span><span class="op">[</span><span class="str">f'; mv {expected_output_filepath} {self.container_volume_path}/mda.rmsd_perres.json'</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t111" href="#t111">111</a></span><span class="t">        <span class="nam">fu</span><span class="op">.</span><span class="nam">log</span><span class="op">(</span><span class="str">'Creating command line with instructions and required arguments'</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">out_log</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">global_log</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t112" href="#t112">112</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t113" href="#t113">113</a></span><span class="t">        <span class="com"># Run Biobb block</span>&nbsp;</span><span class="r"></span></p>
@@ -234,7 +234,7 @@
             <a class="nav" href="index.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.14.0">coverage.py v7.14.0</a>,
-            created at 2026-05-20 15:41 +0000
+            created at 2026-05-20 15:42 +0000
         </p>
     </div>
 </footer>
