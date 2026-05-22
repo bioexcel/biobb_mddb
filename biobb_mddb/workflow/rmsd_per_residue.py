@@ -4,6 +4,7 @@
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools.file_utils import launchlogger
+from pathlib import PurePath
 import shutil
 
 
@@ -95,6 +96,11 @@ class RmsdPerResidue(BiobbObject):
         input_topology_filepath = self.stage_io_dict['in']['input_topology_filepath']
         input_trajectory_filepath = self.stage_io_dict['in']['input_trajectory_filepath']
 
+        # Container paths
+        sandbox = self.stage_io_dict.get("unique_dir", "")
+        if self.container_path:
+            sandbox = self.container_volume_path
+
         # Prepare the command line parameters as instructions list
         instructions = []
         if self.skip_processing:
@@ -104,21 +110,23 @@ class RmsdPerResidue(BiobbObject):
         # Build the actual command line as a list of items (elements order will be maintained)
         replica_subdirectory = 'replica_1'
         expected_output_filepath = replica_subdirectory + '/perres/mda.rmsd_perres.json'
-        self.cmd = [(f'{self.binary_path} run -i perres -top {input_topology_filepath} '
+        self.cmd = [(f'{self.binary_path} run -dir {sandbox} -i perres -top {input_topology_filepath} '
                      f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
-        if self.container_path:
-            self.cmd.extend([f'; mv {expected_output_filepath} {self.container_volume_path}/mda.rmsd_perres.json'])
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
 
         # Run Biobb block
         self.run_biobb()
-        if not self.container_path:
-            # Move output file to the expected location
-            shutil.move(expected_output_filepath, self.stage_io_dict['out']['output_analysis_filepath'])
+
+        # Move output file to the expected location
+        expected_output_filepath_abs = str(PurePath(self.stage_io_dict['unique_dir']).joinpath(expected_output_filepath))
+        fu.log(f"copy {expected_output_filepath_abs} {self.io_dict['out']['output_analysis_filepath']}", self.out_log, self.global_log)
+        shutil.copy(expected_output_filepath_abs, self.io_dict['out']['output_analysis_filepath'])
+
         # Copy files to host
         self.copy_to_host()
 
         # Remove temporary file(s)
+        self.tmp_files.extend([replica_subdirectory, "topology.prmtop"]) 
         self.remove_tmp_files()
 
         # Check output arguments
