@@ -22,3 +22,4 @@ rmsd_per_residue_docker:
     remove_tmp: true
     container_path: docker
     container_image: ghcr.io/mmb-irb/mddb_wf:latest
+    container_user_id: 1001

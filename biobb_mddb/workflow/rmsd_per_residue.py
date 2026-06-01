@@ -112,8 +112,8 @@ class RmsdPerResidue(BiobbObject):
         expected_output_filepath = replica_subdirectory + '/perres/mda.rmsd_perres.json'
         self.cmd = [(f'{self.binary_path} run -dir {sandbox} -i perres -top {input_topology_filepath} '
                      f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
-        if self.container_path:
-            self.cmd.append('; chmod a+w -R ' + str(PurePath(sandbox).joinpath(replica_subdirectory)))
+        #if self.container_path:
+        #    self.cmd.append('; chmod a+w -R ' + str(PurePath(sandbox).joinpath(replica_subdirectory)))
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
 
         # Run Biobb block
