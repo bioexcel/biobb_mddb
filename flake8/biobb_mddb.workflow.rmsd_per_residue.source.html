@@ -68,10 +68,10 @@
                class="code sev- "><tt><i>17</i> <span class="sd">    Args:</span></tt>
             </div>
             <div id="l18"
-               class="code sev- "><tt><i>18</i> <span class="sd">        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file &lt;https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/topology.top&gt;`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).</span></tt>
+               class="code sev- "><tt><i>18</i> <span class="sd">        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file &lt;https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_topology.top&gt;`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).</span></tt>
             </div>
             <div id="l19"
-               class="code sev- "><tt><i>19</i> <span class="sd">        input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file &lt;https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/trajectory.dcd&gt;`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).</span></tt>
+               class="code sev- "><tt><i>19</i> <span class="sd">        input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file &lt;https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_trajectory.dcd&gt;`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).</span></tt>
             </div>
             <div id="l20"
                class="code sev- "><tt><i>20</i> <span class="sd">        output_analysis_filepath (str): Analysis results file. File type: output. `Sample file &lt;https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/mda.rmsd_perres.json&gt;`_. Accepted formats: json (edam:format_3464).</span></tt>
@@ -137,7 +137,7 @@
                class="code sev- "><tt><i>40</i> <span class="sd">            rmsd_per_residue(input_topology_filepath=&#39;/path/to/my_topology.prmtop&#39;,</span></tt>
             </div>
             <div id="l41"
-               class="code sev- "><tt><i>41</i> <span class="sd">                    input_trajectory_filepath=&#39;/path/to/my_trajectory.dcd&#39;,</span></tt>
+               class="code sev- "><tt><i>41</i> <span class="sd">                    input_trajectory_filepath=&#39;/path/to/my_input_trajectory.dcd&#39;,</span></tt>
             </div>
             <div id="l42"
                class="code sev- "><tt><i>42</i> <span class="sd">                    output_analysis_filepath=&#39;/path/to/results.json&#39;,</span></tt>
@@ -158,7 +158,7 @@
                class="code sev- "><tt><i>47</i> <span class="sd">            * name: MDDB Workflow</span></tt>
             </div>
             <div id="l48"
-               class="code sev- "><tt><i>48</i> <span class="sd">            * version: &gt;=0.1.10</span></tt>
+               class="code sev- "><tt><i>48</i> <span class="sd">            * version: &gt;=0.1.11</span></tt>
             </div>
             <div id="l49"
                class="code sev- "><tt><i>49</i> <span class="sd">            * license: Apache-2.0</span></tt>
@@ -359,136 +359,151 @@
                class="code sev- "><tt><i>114</i>                      <span class="sa">f</span><span class="s1">&#39;-md </span><span class="si">{</span><span class="n">replica_subdirectory</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">input_trajectory_filepath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="o">*</span><span class="n">instructions</span><span class="p">]</span></tt>
             </div>
             <div id="l115"
-               class="code sev- "><tt><i>115</i>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">container_path</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>115</i>         <span class="c1"># DANI: Esto hace falta para los dockers, sino falla al borrar los archivos en /tmp</span></tt>
             </div>
             <div id="l116"
-               class="code sev- "><tt><i>116</i>             <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;; chmod a+w -R &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">PurePath</span><span class="p">(</span><span class="n">sandbox</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">replica_subdirectory</span><span class="p">)))</span></tt>
+               class="code sev- "><tt><i>116</i>         <span class="c1"># DANI: Otra alternativa es poner el en conf.yml &#39;remove_tmp: false&#39;</span></tt>
             </div>
             <div id="l117"
-               class="code sev- "><tt><i>117</i>         <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Creating command line with instructions and required arguments&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_log</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>117</i>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">container_path</span><span class="p">:</span></tt>
             </div>
             <div id="l118"
-               class="code sev- "><tt><i>118</i> &nbsp;</tt>
-            </div>
-            <div id="l119"
-               class="code sev- "><tt><i>119</i>         <span class="c1"># Run Biobb block</span></tt>
-            </div>
-            <div id="l120"
-               class="code sev- "><tt><i>120</i>         <span class="bp">self</span><span class="o">.</span><span class="n">run_biobb</span><span class="p">()</span></tt>
-            </div>
-            <div id="l121"
-               class="code sev- "><tt><i>121</i> &nbsp;</tt>
-            </div>
-            <div id="l122"
-               class="code sev- "><tt><i>122</i>         <span class="c1"># Move output file to the expected location</span></tt>
-            </div>
-            <div id="l123"
-               class="code sev- "><tt><i>123</i>         <span class="n">expected_output_filepath_abs</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PurePath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage_io_dict</span><span class="p">[</span><span class="s1">&#39;unique_dir&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">expected_output_filepath</span><span class="p">))</span></tt>
-            </div>
-            <div id="l124"
-               class="code sev- "><tt><i>124</i>         <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;copy </span><span class="si">{</span><span class="n">expected_output_filepath_abs</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">][</span><span class="s1">&#39;output_analysis_filepath&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_log</span><span class="p">)</span></tt>
-            </div>
-            <div id="l125"
-               class="code sev- "><tt><i>125</i>         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">expected_output_filepath_abs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">][</span><span class="s1">&#39;output_analysis_filepath&#39;</span><span class="p">])</span></tt>
-            </div>
-            <div id="l126"
-               class="code sev- "><tt><i>126</i> &nbsp;</tt>
-            </div>
-            <div id="l127"
-               class="code sev- "><tt><i>127</i>         <span class="c1"># Copy files to host</span></tt>
-            </div>
-            <div id="l128"
-               class="code sev- "><tt><i>128</i>         <span class="bp">self</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span></tt>
-            </div>
-            <div id="l129"
-               class="code sev- "><tt><i>129</i> &nbsp;</tt>
-            </div>
-            <div id="l130"
-               class="code sev- "><tt><i>130</i>         <span class="c1"># Remove temporary file(s)</span></tt>
-            </div>
-            <div id="l131"
                class="code sev-2  le">
                <ul class="violations">
                
                   <li>
                      <span class="count sev-2">
-                        W291
+                        E111
                      </span>
-                     Trailing whitespace</li>
+                     Indentation is not a multiple of 4</li>
                
-               </ul><tt><i>131</i>         <span class="bp">self</span><span class="o">.</span><span class="n">tmp_files</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">replica_subdirectory</span><span class="p">,</span> <span class="s2">&quot;topology.prmtop&quot;</span><span class="p">])</span> </tt>
+               </ul><tt><i>118</i>            <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;; chmod a+w -R &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">PurePath</span><span class="p">(</span><span class="n">sandbox</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">replica_subdirectory</span><span class="p">)))</span></tt>
+            </div>
+            <div id="l119"
+               class="code sev- "><tt><i>119</i>         <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Creating command line with instructions and required arguments&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_log</span><span class="p">)</span></tt>
+            </div>
+            <div id="l120"
+               class="code sev- "><tt><i>120</i> &nbsp;</tt>
+            </div>
+            <div id="l121"
+               class="code sev- "><tt><i>121</i>         <span class="c1"># Run Biobb block</span></tt>
+            </div>
+            <div id="l122"
+               class="code sev- "><tt><i>122</i>         <span class="bp">self</span><span class="o">.</span><span class="n">run_biobb</span><span class="p">()</span></tt>
+            </div>
+            <div id="l123"
+               class="code sev- "><tt><i>123</i> &nbsp;</tt>
+            </div>
+            <div id="l124"
+               class="code sev- "><tt><i>124</i>         <span class="c1"># Move output file to the expected location</span></tt>
+            </div>
+            <div id="l125"
+               class="code sev- "><tt><i>125</i>         <span class="n">expected_output_filepath_abs</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PurePath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage_io_dict</span><span class="p">[</span><span class="s1">&#39;unique_dir&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">expected_output_filepath</span><span class="p">))</span></tt>
+            </div>
+            <div id="l126"
+               class="code sev- "><tt><i>126</i>         <span class="n">fu</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;copy </span><span class="si">{</span><span class="n">expected_output_filepath_abs</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">][</span><span class="s1">&#39;output_analysis_filepath&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_log</span><span class="p">)</span></tt>
+            </div>
+            <div id="l127"
+               class="code sev- "><tt><i>127</i>         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">expected_output_filepath_abs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">io_dict</span><span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">][</span><span class="s1">&#39;output_analysis_filepath&#39;</span><span class="p">])</span></tt>
+            </div>
+            <div id="l128"
+               class="code sev- "><tt><i>128</i> &nbsp;</tt>
+            </div>
+            <div id="l129"
+               class="code sev- "><tt><i>129</i>         <span class="c1"># Copy files to host</span></tt>
+            </div>
+            <div id="l130"
+               class="code sev- "><tt><i>130</i>         <span class="bp">self</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span></tt>
+            </div>
+            <div id="l131"
+               class="code sev- "><tt><i>131</i> &nbsp;</tt>
             </div>
             <div id="l132"
-               class="code sev- "><tt><i>132</i>         <span class="bp">self</span><span class="o">.</span><span class="n">remove_tmp_files</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>132</i>         <span class="c1"># Remove temporary file(s)</span></tt>
             </div>
             <div id="l133"
-               class="code sev- "><tt><i>133</i> &nbsp;</tt>
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E261
+                     </span>
+                     At least two spaces before inline comment</li>
+               
+               </ul><tt><i>133</i>         <span class="bp">self</span><span class="o">.</span><span class="n">tmp_files</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">replica_subdirectory</span><span class="p">,</span> <span class="s2">&quot;topology.prmtop&quot;</span><span class="p">])</span> <span class="c1"># DANI: Esto que hace?</span></tt>
             </div>
             <div id="l134"
-               class="code sev- "><tt><i>134</i>         <span class="c1"># Check output arguments</span></tt>
+               class="code sev- "><tt><i>134</i>         <span class="bp">self</span><span class="o">.</span><span class="n">remove_tmp_files</span><span class="p">()</span></tt>
             </div>
             <div id="l135"
-               class="code sev- "><tt><i>135</i>         <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span><span class="n">output_files_created</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>135</i> &nbsp;</tt>
             </div>
             <div id="l136"
-               class="code sev- "><tt><i>136</i> &nbsp;</tt>
+               class="code sev- "><tt><i>136</i>         <span class="c1"># Check output arguments</span></tt>
             </div>
             <div id="l137"
-               class="code sev- "><tt><i>137</i>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_code</span></tt>
+               class="code sev- "><tt><i>137</i>         <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span><span class="n">output_files_created</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></tt>
             </div>
             <div id="l138"
                class="code sev- "><tt><i>138</i> &nbsp;</tt>
             </div>
             <div id="l139"
-               class="code sev- "><tt><i>139</i> &nbsp;</tt>
+               class="code sev- "><tt><i>139</i>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_code</span></tt>
             </div>
             <div id="l140"
-               class="code sev- "><tt><i>140</i> <span class="k">def</span><span class="w"> </span><span class="nf">rmsd_per_residue</span><span class="p">(</span><span class="n">input_trajectory_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">input_topology_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span></tt>
+               class="code sev- "><tt><i>140</i> &nbsp;</tt>
             </div>
             <div id="l141"
-               class="code sev- "><tt><i>141</i>                      <span class="n">output_analysis_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span></tt>
+               class="code sev- "><tt><i>141</i> &nbsp;</tt>
             </div>
             <div id="l142"
-               class="code sev- "><tt><i>142</i>                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>142</i> <span class="k">def</span><span class="w"> </span><span class="nf">rmsd_per_residue</span><span class="p">(</span><span class="n">input_trajectory_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">input_topology_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span></tt>
             </div>
             <div id="l143"
-               class="code sev- "><tt><i>143</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create :class:`Workflow &lt;workflow.rmsd_per_residue.RmsdPerResidue&gt;` class and</span></tt>
+               class="code sev- "><tt><i>143</i>                      <span class="n">output_analysis_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span></tt>
             </div>
             <div id="l144"
-               class="code sev- "><tt><i>144</i> <span class="sd">    execute the :meth:`launch() &lt;workflow.rmsd_per_residue.RmsdPerResidue.launch&gt;` method.&quot;&quot;&quot;</span></tt>
+               class="code sev- "><tt><i>144</i>                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span></tt>
             </div>
             <div id="l145"
-               class="code sev- "><tt><i>145</i>     <span class="k">return</span> <span class="n">RmsdPerResidue</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">locals</span><span class="p">()))</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>145</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create :class:`Workflow &lt;workflow.rmsd_per_residue.RmsdPerResidue&gt;` class and</span></tt>
             </div>
             <div id="l146"
-               class="code sev- "><tt><i>146</i> &nbsp;</tt>
+               class="code sev- "><tt><i>146</i> <span class="sd">    execute the :meth:`launch() &lt;workflow.rmsd_per_residue.RmsdPerResidue.launch&gt;` method.&quot;&quot;&quot;</span></tt>
             </div>
             <div id="l147"
-               class="code sev- "><tt><i>147</i> &nbsp;</tt>
+               class="code sev- "><tt><i>147</i>     <span class="k">return</span> <span class="n">RmsdPerResidue</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">locals</span><span class="p">()))</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span></tt>
             </div>
             <div id="l148"
-               class="code sev- "><tt><i>148</i> <span class="n">rmsd_per_residue</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">RmsdPerResidue</span><span class="o">.</span><span class="vm">__doc__</span></tt>
+               class="code sev- "><tt><i>148</i> &nbsp;</tt>
             </div>
             <div id="l149"
-               class="code sev- "><tt><i>149</i> <span class="n">main</span> <span class="o">=</span> <span class="n">RmsdPerResidue</span><span class="o">.</span><span class="n">get_main</span><span class="p">(</span><span class="n">rmsd_per_residue</span><span class="p">,</span> <span class="s1">&#39;RMSD per residue using the MDDB workflow.&#39;</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>149</i> &nbsp;</tt>
             </div>
             <div id="l150"
-               class="code sev- "><tt><i>150</i> &nbsp;</tt>
+               class="code sev- "><tt><i>150</i> <span class="n">rmsd_per_residue</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">RmsdPerResidue</span><span class="o">.</span><span class="vm">__doc__</span></tt>
             </div>
             <div id="l151"
-               class="code sev- "><tt><i>151</i> &nbsp;</tt>
+               class="code sev- "><tt><i>151</i> <span class="n">main</span> <span class="o">=</span> <span class="n">RmsdPerResidue</span><span class="o">.</span><span class="n">get_main</span><span class="p">(</span><span class="n">rmsd_per_residue</span><span class="p">,</span> <span class="s1">&#39;RMSD per residue using the MDDB workflow.&#39;</span><span class="p">)</span></tt>
             </div>
             <div id="l152"
-               class="code sev- "><tt><i>152</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
+               class="code sev- "><tt><i>152</i> &nbsp;</tt>
             </div>
             <div id="l153"
-               class="code sev- "><tt><i>153</i>     <span class="n">main</span><span class="p">()</span></tt>
+               class="code sev- "><tt><i>153</i> &nbsp;</tt>
             </div>
             <div id="l154"
-               class="code sev- "><tt><i>154</i> &nbsp;</tt>
+               class="code sev- "><tt><i>154</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
             </div>
             <div id="l155"
-               class="code sev- "><tt><i>155</i> <span class="c1"># 12. Complete documentation strings</span></tt>
+               class="code sev- "><tt><i>155</i>     <span class="n">main</span><span class="p">()</span></tt>
+            </div>
+            <div id="l156"
+               class="code sev- "><tt><i>156</i> &nbsp;</tt>
+            </div>
+            <div id="l157"
+               class="code sev- "><tt><i>157</i> <span class="c1"># 12. Complete documentation strings</span></tt>
             </div>
             
          </div>
