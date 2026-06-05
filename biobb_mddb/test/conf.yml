@@ -3,8 +3,8 @@ global_properties:
 
 rmsd_per_residue:
   paths:
-    input_topology_filepath: file:test_data_dir/workflow/topology.top
-    input_trajectory_filepath: file:test_data_dir/workflow/trajectory.dcd
+    input_topology_filepath: file:test_data_dir/workflow/input_topology.top
+    input_trajectory_filepath: file:test_data_dir/workflow/input_trajectory.dcd
     ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
     output_analysis_filepath: mda.rmsd_perres.json
   properties:
@@ -13,8 +13,8 @@ rmsd_per_residue:
 
 rmsd_per_residue_docker:
   paths:
-    input_topology_filepath: file:test_data_dir/workflow/topology.top
-    input_trajectory_filepath: file:test_data_dir/workflow/trajectory.dcd
+    input_topology_filepath: file:test_data_dir/workflow/input_topology.top
+    input_trajectory_filepath: file:test_data_dir/workflow/input_trajectory.dcd
     ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
     output_analysis_filepath: mda.rmsd_perres.json
   properties:
