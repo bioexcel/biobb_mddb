@@ -8,6 +8,9 @@ from pathlib import PurePath
 from glob import glob
 import shutil
 
+# Set some input default values
+DEFAULT_OUTPUT_TRAJECTORY_FILENAME = 'trajectory.xtc'
+DEFAULT_OUTPUT_STRUCTURE_FILENAME = 'structure.pdb'
 DEFAULT_FILTERING_ALIAS = 'def'
 
 class InputProcessing(BiobbObject):
@@ -140,22 +143,33 @@ class InputProcessing(BiobbObject):
         # Run Biobb block
         self.run_biobb()
 
+        # Make sure there is only one possible output topology file
+        output_topology_glob = glob(str(PurePath(self.stage_io_dict['unique_dir']).joinpath('topology.*')))
+        if len(output_topology_glob) == 0:
+            fu.log('The expected output topology file is nowhere to be found', self.err_log, self.global_log)
+            return 1
+        if len(output_topology_glob) > 1:
+            fu.log(f'There are multiple files which could be the output topology: {", ".join(output_topology_glob)}', self.err_log, self.global_log)
+            return 1
+        expected_output_topology_filename = output_topology_glob[0].split('/')[-1]
+
         # Move output files to the expected location
         expected_output_filepaths = {
-            self.output_topology_filepath: glob(f'{replica_subdirectory}/topology.*'),
-            self.output_trajectory_filepath: f'{replica_subdirectory}/trajectory.xtc',
-            self.output_structure_filepath: f'{replica_subdirectory}/structure.pdb',
+            self.io_dict['out']['output_topology_filepath']: expected_output_topology_filename,
+            self.io_dict['out']['output_trajectory_filepath'] or '': f'{replica_subdirectory}/{DEFAULT_OUTPUT_TRAJECTORY_FILENAME}',
+            self.io_dict['out']['output_structure_filepath']: f'{replica_subdirectory}/{DEFAULT_OUTPUT_STRUCTURE_FILENAME}',
         }
         for output_filepath, expected_output_filepath in expected_output_filepaths.items():
             absolute_filepath = str(PurePath(self.stage_io_dict['unique_dir']).joinpath(expected_output_filepath))
-            fu.log(f"copy {absolute_filepath} {self.io_dict['out'][output_filepath]}", self.out_log, self.global_log)
-            shutil.copy(absolute_filepath, self.io_dict['out'][output_filepath])
+            fu.log(f"copy {absolute_filepath} {output_filepath}", self.out_log, self.global_log)
+            shutil.copy(absolute_filepath, output_filepath)
 
         # Copy files to host
         self.copy_to_host()
 
         # Remove temporary file(s)
-        #self.tmp_files.extend([replica_subdirectory, "topology.prmtop"]) 
+        if self.disable_sandbox and self.remove_tmp:
+            self.tmp_files.extend([replica_subdirectory, "topology.prmtop"])
         self.remove_tmp_files()
 
         # Check output arguments
@@ -165,7 +179,8 @@ class InputProcessing(BiobbObject):
 
 
 def input_processing(input_trajectory_filepath: str, input_topology_filepath: str = None,
-                     output_analysis_filepath: str = None, properties: dict | None = None,
+                    output_topology_filepath: str = None, output_trajectory_filepath: str = None,
+                    output_structure_filepath: str = None, properties: dict | None = None,
                      **kwargs) -> int:
     """Create :class:`Workflow <workflow.input_processing.InputProcessing>` class and
     execute the :meth:`launch() <workflow.input_processing.InputProcessing.launch>` method."""
@@ -173,7 +188,7 @@ def input_processing(input_trajectory_filepath: str, input_topology_filepath: st
 
 
 input_processing.__doc__ = InputProcessing.__doc__
-main = InputProcessing.get_main(input_processing, 'RMSD per residue using the MDDB workflow.')
+main = InputProcessing.get_main(input_processing, 'Process raw input files using the MDDB workflow.')
 
 
 if __name__ == '__main__':

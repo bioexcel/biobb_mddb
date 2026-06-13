@@ -130,7 +130,8 @@ class RmsdPerResidue(BiobbObject):
         self.copy_to_host()
 
         # Remove temporary file(s)
-        self.tmp_files.extend([replica_subdirectory, "topology.prmtop"]) # DANI: Esto que hace?
+        if self.disable_sandbox and self.remove_tmp:
+            self.tmp_files.extend([replica_subdirectory, "topology.prmtop"])
         self.remove_tmp_files()
 
         # Check output arguments

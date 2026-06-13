@@ -23,3 +23,19 @@ rmsd_per_residue_docker:
     container_path: docker
     container_image: ghcr.io/mmb-irb/mddb_wf:latest
     container_user_id: '1001'
+
+input_processing:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/input_topology.top
+    input_trajectory_filepath: file:test_data_dir/workflow/input_trajectory.dcd
+    ref_output_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    output_topology_filepath: output_topology.prmtop
+    ref_output_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    output_trajectory_filepath: output_trajectory.xtc
+    ref_output_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
+    output_structure_filepath: output_structure.pdb
+  properties:
+    filter: false
+    image: false
+    fit: false
+    remove_tmp: true
