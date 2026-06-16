@@ -15,11 +15,11 @@ class RmsdPerResidue(BiobbObject):
     | Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.
 
     Args:
-        input_topology_filepath (str): Input topology or structure file. File type: input. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_topology.top>`_. Accepted formats: pdb (edam:format_1476), gro (edam:format_2033), prmtop (edam:format_3881), top (edam:format_3880), itp (edam:format_3883), tpr (edam:format_2333), psf (edam:format_3882).
-        input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_trajectory.dcd>`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).
+        input_topology_filepath (str): Already processed topology file, with a filtered set of atoms matching the trajectory. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_topology.prmtop>`_. Accepted formats: prmtop (edam:format_3881), top (edam:format_3880), tpr (edam:format_2333), psf (edam:format_3882).
+        input_trajectory_filepath (str): Already processed XTC trajectory file with the filtered, imaged and fitted coordinates. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_trajectory.xtc>`_. Accepted formats: xtc (edam:format_3875).
+        input_structure_filepath (str): Already processed PDB structure file with the filtered, imaged and fitted coordinates. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_structure.pdb>`_. Accepted formats: pdb (edam:format_1476).
         output_analysis_filepath (str): Analysis results file. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/mda.rmsd_perres.json>`_. Accepted formats: json (edam:format_3464).
         properties (dic):
-            * **skip_processing** (*bool*) - (False) Do not process input files, assuming they were already processed.
             * **binary_path** (*str*) - ("mwf") Example of executable binary property.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
@@ -36,9 +36,10 @@ class RmsdPerResidue(BiobbObject):
 
             from biobb_mddb.workflow.workflow import rmsd_per_residue
 
-            prop = { 'skip_processing': False }
+            prop = {}
             rmsd_per_residue(input_topology_filepath='/path/to/my_topology.prmtop',
-                    input_trajectory_filepath='/path/to/my_input_trajectory.dcd',
+                    input_trajectory_filepath='/path/to/my_trajectory.xtc',
+                    input_structure_filepath=/path/to/my_structure.pdb',
                     output_analysis_filepath='/path/to/results.json',
                     properties=prop)
 
@@ -53,8 +54,10 @@ class RmsdPerResidue(BiobbObject):
 
     """
 
-    def __init__(self, input_topology_filepath: str, input_trajectory_filepath: str,
-                 output_analysis_filepath: str, properties=None, **kwargs) -> None:
+    def __init__(self,
+            input_topology_filepath: str, input_trajectory_filepath: str,
+            input_structure_filepath: str, output_analysis_filepath: str,
+            properties=None, **kwargs) -> None:
         properties = properties or {}
 
         # Call parent class constructor
@@ -67,6 +70,7 @@ class RmsdPerResidue(BiobbObject):
             'in': {
                 'input_topology_filepath': input_topology_filepath,
                 'input_trajectory_filepath': input_trajectory_filepath,
+                'input_structure_filepath': input_structure_filepath,
             },
             'out': {
                 'output_analysis_filepath': output_analysis_filepath,
@@ -74,7 +78,6 @@ class RmsdPerResidue(BiobbObject):
         }
 
         # Properties specific for BB
-        self.skip_processing = properties.get('skip_processing', False)
         self.binary_path = properties.get('binary_path', 'mwf')
         self.properties = properties
 
@@ -95,6 +98,7 @@ class RmsdPerResidue(BiobbObject):
         # Parse filepaths
         input_topology_filepath = self.stage_io_dict['in']['input_topology_filepath']
         input_trajectory_filepath = self.stage_io_dict['in']['input_trajectory_filepath']
+        input_structure_filepath = self.stage_io_dict['in']['input_structure_filepath']
 
         # Container paths
         sandbox = self.stage_io_dict.get("unique_dir", "")
@@ -102,15 +106,15 @@ class RmsdPerResidue(BiobbObject):
             sandbox = self.container_volume_path
 
         # Prepare the command line parameters as instructions list
-        instructions = []
-        if self.skip_processing:
-            instructions.append('--faith')
-            fu.log('Appending optional boolean property', self.out_log, self.global_log)
+        # Use the 'faith' argument to always skip the processing and checking steps
+        # We asume all MDDB workflow BioBBs will be run after a input processing step
+        instructions = ['--faith']
 
         # Build the actual command line as a list of items (elements order will be maintained)
         replica_subdirectory = 'replica_1'
         expected_output_filepath = replica_subdirectory + '/perres/mda.rmsd_perres.json'
         self.cmd = [(f'{self.binary_path} run -dir {sandbox} -i perres -top {input_topology_filepath} '
+                     f'-stru {input_structure_filepath} '
                      f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
         # DANI: Esto hace falta para los dockers, sino falla al borrar los archivos en /tmp
         # DANI: Otra alternativa es poner el en conf.yml 'remove_tmp: false'
@@ -140,8 +144,9 @@ class RmsdPerResidue(BiobbObject):
         return self.return_code
 
 
-def rmsd_per_residue(input_trajectory_filepath: str, input_topology_filepath: str = None,
-                     output_analysis_filepath: str = None, properties: dict | None = None,
+def rmsd_per_residue(input_trajectory_filepath: str, input_topology_filepath: str,
+                     input_structure_filepath: str, output_analysis_filepath: str,
+                     properties: dict | None = None,
                      **kwargs) -> int:
     """Create :class:`Workflow <workflow.rmsd_per_residue.RmsdPerResidue>` class and
     execute the :meth:`launch() <workflow.rmsd_per_residue.RmsdPerResidue.launch>` method."""

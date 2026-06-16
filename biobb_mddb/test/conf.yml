@@ -3,22 +3,22 @@ global_properties:
 
 rmsd_per_residue:
   paths:
-    input_topology_filepath: file:test_data_dir/workflow/input_topology.top
-    input_trajectory_filepath: file:test_data_dir/workflow/input_trajectory.dcd
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
     ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
     output_analysis_filepath: mda.rmsd_perres.json
   properties:
-    skip_processing: false
     remove_tmp: true
 
 rmsd_per_residue_docker:
   paths:
-    input_topology_filepath: file:test_data_dir/workflow/input_topology.top
-    input_trajectory_filepath: file:test_data_dir/workflow/input_trajectory.dcd
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
     ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
     output_analysis_filepath: mda.rmsd_perres.json
   properties:
-    skip_processing: false
     remove_tmp: true
     container_path: docker
     container_image: ghcr.io/mmb-irb/mddb_wf:latest
