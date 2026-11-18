@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "filter": false,
+    "image": false,
+    "fit": false,
+    "remove_tmp": true
+  }
+}

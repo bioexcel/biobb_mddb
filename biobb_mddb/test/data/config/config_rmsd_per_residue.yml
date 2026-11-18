@@ -1,3 +1,2 @@
 properties:
   remove_tmp: true
-  skip_processing: false

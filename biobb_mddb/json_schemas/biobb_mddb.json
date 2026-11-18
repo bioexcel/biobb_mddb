@@ -7,25 +7,180 @@
     "docker": "https://quay.io/biocontainers/biobb_mddb:5.2.0--pyhdfd78af_0",
     "singularity": "https://depot.galaxyproject.org/singularity/biobb_mddb:5.2.0--pyhdfd78af_0",
     "version": "5.2.0",
-    "tools" : [
+    "tools": [
         {
-            "block" : "RmsdPerResidue", 
-            "tool" : "MDDB workflow", 
-            "desc" : "Calculate average and standard deviation RMSD per residue for every residue in a system using a sampling of frames along the trajectory.",
-            "exec" : "rmsd_per_residue",
+            "block": "AreaPerLipid",
+            "tool": "MDDB workflow",
+            "desc": "Area per lipid of the membrane.",
+            "exec": "area_per_lipid",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.area_per_lipid"
+        },
+        {
+            "block": "Clusters",
+            "tool": "MDDB workflow",
+            "desc": "Conformational clustering of every interaction.",
+            "exec": "clusters",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.clusters"
+        },
+        {
+            "block": "DihedralEnergies",
+            "tool": "MDDB workflow",
+            "desc": "Torsion and energy of every dihedral along the trajectory.",
+            "exec": "dihedral_energies",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.dihedral_energies"
+        },
+        {
+            "block": "DistancePerResidue",
+            "tool": "MDDB workflow",
+            "desc": "Average and standard deviation of the distance between interface residues.",
+            "exec": "distance_per_residue",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.distance_per_residue"
+        },
+        {
+            "block": "Energies",
+            "tool": "MDDB workflow",
+            "desc": "Electrostatic and van der Waals energies in the interface of every interaction.",
+            "exec": "energies",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.energies"
+        },
+        {
+            "block": "HelicalParameters",
+            "tool": "MDDB workflow",
+            "desc": "Helical parameters of nucleic acids.",
+            "exec": "helical_parameters",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.helical_parameters"
+        },
+        {
+            "block": "HydrogenBonds",
+            "tool": "MDDB workflow",
+            "desc": "Hydrogen bonds in the interface of every interaction.",
+            "exec": "hydrogen_bonds",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.hydrogen_bonds"
+        },
+        {
+            "block": "InputProcessing",
+            "tool": "MDDB workflow",
+            "desc": "Process input raw files by converting, filtering, imaging, fitting, and finally quality-checking the output files.",
+            "exec": "input_processing",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.input_processing"
+        },
+        {
+            "block": "LipidInteractions",
+            "tool": "MDDB workflow",
+            "desc": "Contacts between lipids and other residues.",
+            "exec": "lipid_interactions",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.lipid_interactions"
+        },
+        {
+            "block": "LipidOrder",
+            "tool": "MDDB workflow",
+            "desc": "Lipid tail order parameters.",
+            "exec": "lipid_order",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.lipid_order"
+        },
+        {
+            "block": "Markov",
+            "tool": "MDDB workflow",
+            "desc": "Data to represent a Markov State Model (MSM).",
+            "exec": "markov",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.markov"
+        },
+        {
+            "block": "MembraneChannels",
+            "tool": "MDDB workflow",
+            "desc": "Channels across the membrane.",
+            "exec": "membrane_channels",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.membrane_channels"
+        },
+        {
+            "block": "MembraneDensity",
+            "tool": "MDDB workflow",
+            "desc": "Density profile of membrane components along the membrane normal.",
+            "exec": "membrane_density",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.membrane_density"
+        },
+        {
+            "block": "MembraneThickness",
+            "tool": "MDDB workflow",
+            "desc": "Membrane thickness along the trajectory.",
+            "exec": "membrane_thickness",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.membrane_thickness"
+        },
+        {
+            "block": "Pca",
+            "tool": "MDDB workflow",
+            "desc": "Principal component analysis (PCA) of the trajectory.",
+            "exec": "pca",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.pca"
+        },
+        {
+            "block": "Pockets",
+            "tool": "MDDB workflow",
+            "desc": "Pockets and their volume along the trajectory.",
+            "exec": "pockets",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.pockets"
+        },
+        {
+            "block": "Rgyr",
+            "tool": "MDDB workflow",
+            "desc": "Radius of gyration along the trajectory.",
+            "exec": "rgyr",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rgyr"
+        },
+        {
+            "block": "RmsdPairwise",
+            "tool": "MDDB workflow",
+            "desc": "RMSD between every pair of frames.",
+            "exec": "rmsd_pairwise",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rmsd_pairwise"
+        },
+        {
+            "block": "RmsdPerResidue",
+            "tool": "MDDB workflow",
+            "desc": "Average and standard deviation of the RMSD per residue.",
+            "exec": "rmsd_per_residue",
             "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rmsd_per_residue"
+        },
+        {
+            "block": "Rmsds",
+            "tool": "MDDB workflow",
+            "desc": "RMSD along the trajectory against the first frame and the average structure.",
+            "exec": "rmsds",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rmsds"
+        },
+        {
+            "block": "Rmsf",
+            "tool": "MDDB workflow",
+            "desc": "RMSF, the fluctuation of every atom along the trajectory.",
+            "exec": "rmsf",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.rmsf"
+        },
+        {
+            "block": "Sasa",
+            "tool": "MDDB workflow",
+            "desc": "Solvent accessible surface area (SASA) per residue.",
+            "exec": "sasa",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.sasa"
+        },
+        {
+            "block": "Tmscores",
+            "tool": "MDDB workflow",
+            "desc": "TM scores along the trajectory against the first frame and the average structure.",
+            "exec": "tmscores",
+            "docs": "https://biobb-mddb.readthedocs.io/en/latest/workflow.html#module-workflow.tmscores"
         }
     ],
-    "dep_pypi" : [
-        "install_requires=['biobb_common==5.2.2']", 
+    "dep_pypi": [
+        "install_requires=['biobb_common==5.2.2']",
         "python_requires='>=3.11'"
-    ], 
-    "dep_conda" : [
-        "python >=3.11", 
+    ],
+    "dep_conda": [
+        "python >=3.11",
         "biobb_common ==5.2.2"
     ],
-    "keywords" : [
+    "keywords": [
         "mddb",
-        "keywords"
+        "molecular dynamics",
+        "analysis"
     ]
 }

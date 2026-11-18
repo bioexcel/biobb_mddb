@@ -1,0 +1,11 @@
+{
+    "interactions": [
+        {
+            "name": "domain-domain interaction",
+            "agent_1": "N-terminal domain",
+            "selection_1": "resid 1 to 355",
+            "agent_2": "C-terminal domain",
+            "selection_2": "resid 356 to 710"
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+properties:
+  container_image: ghcr.io/mmb-irb/mddb_wf:latest
+  container_path: docker
+  container_user_id: '1001'
+  remove_tmp: true

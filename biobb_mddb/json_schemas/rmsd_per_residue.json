@@ -8,7 +8,7 @@
     "info": {
         "wrapped_software": {
             "name": "MDDB Workflow",
-            "version": ">=0.1.11",
+            "version": ">=0.1.12",
             "license": "Apache-2.0"
         },
         "ontology": {
@@ -18,126 +18,135 @@
     },
     "required": [
         "input_topology_filepath",
+        "input_structure_filepath",
         "input_trajectory_filepath",
         "output_analysis_filepath"
     ],
     "properties": {
         "input_topology_filepath": {
             "type": "string",
-            "description": "Input topology or structure file",
+            "description": "Already processed topology file, with atoms matching the trajectory (e.g. the output of the input processing block)",
             "filetype": "input",
-            "sample": "https://urlto.sample",
+            "sample": "https://github.com/bioexcel/biobb_mddb/raw/master/biobb_mddb/test/data/workflow/output_topology.prmtop",
             "enum": [
-                ".*\\.pdb$",
-                ".*\\.gro$",
                 ".*\\.prmtop$",
                 ".*\\.top$",
-                ".*\\.itp$",
                 ".*\\.tpr$",
                 ".*\\.psf$"
             ],
             "file_formats": [
                 {
-                    "extension": ".*\\.pdb$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_1476)"
-                },
-                {
-                    "extension": ".*\\.gro$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_2033)"
-                },
-                {
                     "extension": ".*\\.prmtop$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_3881)"
+                    "description": "Already processed topology file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+                    "edam": "format_3881"
                 },
                 {
                     "extension": ".*\\.top$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_3880)"
-                },
-                {
-                    "extension": ".*\\.itp$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_3883)"
+                    "description": "Already processed topology file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+                    "edam": "format_3880"
                 },
                 {
                     "extension": ".*\\.tpr$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_2333)"
+                    "description": "Already processed topology file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+                    "edam": "format_2333"
                 },
                 {
                     "extension": ".*\\.psf$",
-                    "description": "Input topology or structure file",
-                    "(edam": "format_3882)"
+                    "description": "Already processed topology file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+                    "edam": "format_3882"
+                }
+            ]
+        },
+        "input_structure_filepath": {
+            "type": "string",
+            "description": "Already processed mmCIF structure file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_mddb/raw/master/biobb_mddb/test/data/workflow/output_structure.cif",
+            "enum": [
+                ".*\\.cif$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.cif$",
+                    "description": "Already processed mmCIF structure file, with atoms matching the trajectory (e.g. the output of the input processing block)",
+                    "edam": "format_1477"
                 }
             ]
         },
         "input_trajectory_filepath": {
             "type": "string",
-            "description": "Input trajectory file",
+            "description": "Already processed XTC trajectory file, with imaged and fitted coordinates (e.g. the output of the input processing block)",
             "filetype": "input",
-            "sample": "https://urlto.sample",
+            "sample": "https://github.com/bioexcel/biobb_mddb/raw/master/biobb_mddb/test/data/workflow/output_trajectory.xtc",
             "enum": [
-                ".*\\.xtc$",
-                ".*\\.trr$",
-                ".*\\.dcd$",
-                ".*\\.nc$"
+                ".*\\.xtc$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.xtc$",
-                    "description": "Input trajectory file",
-                    "(edam": "format_3875)"
+                    "description": "Already processed XTC trajectory file, with imaged and fitted coordinates (e.g. the output of the input processing block)",
+                    "edam": "format_3875"
+                }
+            ]
+        },
+        "input_inputs_filepath": {
+            "type": "string",
+            "description": "MDDB workflow inputs file, to set analysis parameters such as interactions, ligands or atom selections. Properties have priority over values in this file",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_mddb/raw/master/biobb_mddb/test/data/workflow/inputs_interactions.json",
+            "enum": [
+                ".*\\.json$",
+                ".*\\.yaml$",
+                ".*\\.yml$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "MDDB workflow inputs file, to set analysis parameters such as interactions, ligands or atom selections. Properties have priority over values in this file",
+                    "edam": "format_3464"
                 },
                 {
-                    "extension": ".*\\.trr$",
-                    "description": "Input trajectory file",
-                    "(edam": "format_3910)"
+                    "extension": ".*\\.yaml$",
+                    "description": "MDDB workflow inputs file, to set analysis parameters such as interactions, ligands or atom selections. Properties have priority over values in this file",
+                    "edam": "format_3750"
                 },
                 {
-                    "extension": ".*\\.dcd$",
-                    "description": "Input trajectory file",
-                    "(edam": "format_3878)"
-                },
-                {
-                    "extension": ".*\\.nc$",
-                    "description": "Input trajectory file",
-                    "(edam": "format_3650)"
+                    "extension": ".*\\.yml$",
+                    "description": "MDDB workflow inputs file, to set analysis parameters such as interactions, ligands or atom selections. Properties have priority over values in this file",
+                    "edam": "format_3750"
                 }
             ]
         },
         "output_analysis_filepath": {
             "type": "string",
-            "description": "Analysis results file",
+            "description": "RMSD per residue analysis results",
             "filetype": "output",
-            "sample": "https://urlto.sample",
+            "sample": "https://github.com/bioexcel/biobb_mddb/raw/master/biobb_mddb/test/reference/workflow/ref_rmsd_per_residue.json",
             "enum": [
                 ".*\\.json$"
             ],
             "file_formats": [
                 {
                     "extension": ".*\\.json$",
-                    "description": "Analysis results file",
-                    "(edam": "format_3464)"
+                    "description": "RMSD per residue analysis results",
+                    "edam": "format_3464"
                 }
             ]
         },
         "properties": {
             "type": "object",
             "properties": {
-                "skip_processing": {
-                    "type": "boolean",
-                    "default": false,
+                "pbc_selection": {
+                    "type": "string",
+                    "default": null,
                     "wf_prop": false,
-                    "description": "Do not process input files, assuming they were already processed."
+                    "description": "Atom selection (VMD syntax) of atoms under Periodic Boundary Conditions (e.g. solvent, ions, membrane lipids), which are excluded from the analysis. Use 'auto' to guess them. If not set, the value in the inputs file is used, or 'auto' by default."
                 },
                 "binary_path": {
                     "type": "string",
                     "default": "mwf",
                     "wf_prop": false,
-                    "description": "Example of executable binary property."
+                    "description": "Path to the MDDB workflow executable binary."
                 },
                 "remove_tmp": {
                     "type": "boolean",
@@ -156,6 +165,42 @@
                     "default": "./",
                     "wf_prop": true,
                     "description": "Parent path to the sandbox directory."
+                },
+                "container_path": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Path to the binary executable of your container."
+                },
+                "container_image": {
+                    "type": "string",
+                    "default": "ghcr.io/mmb-irb/mddb_wf:latest",
+                    "wf_prop": false,
+                    "description": "Container Image identifier."
+                },
+                "container_volume_path": {
+                    "type": "string",
+                    "default": "/data",
+                    "wf_prop": false,
+                    "description": "Path to an internal directory in the container."
+                },
+                "container_working_dir": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Path to the internal CWD in the container."
+                },
+                "container_user_id": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "User number id to be mapped inside the container."
+                },
+                "container_shell_path": {
+                    "type": "string",
+                    "default": "/bin/bash",
+                    "wf_prop": false,
+                    "description": "Path to the binary executable of the container shell."
                 }
             }
         }

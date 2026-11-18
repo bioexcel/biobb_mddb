@@ -10,7 +10,7 @@ import shutil
 
 # Set some input default values
 DEFAULT_OUTPUT_TRAJECTORY_FILENAME = 'trajectory.xtc'
-DEFAULT_OUTPUT_STRUCTURE_FILENAME = 'structure.pdb'
+DEFAULT_OUTPUT_STRUCTURE_FILENAME = 'structure.cif'
 DEFAULT_FILTERING_ALIAS = 'def'
 
 class InputProcessing(BiobbObject):
@@ -24,17 +24,17 @@ class InputProcessing(BiobbObject):
         input_trajectory_filepath (str): Input trajectory file. File type: input. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_trajectory.dcd>`_. Accepted formats: xtc (edam:format_3875), trr (edam:format_3910), dcd (edam:format_3878), nc (edam:format_3650).
         output_topology_filepath (str): Output topology file, with a filtered set of atoms matching the trajectory. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_topology.prmtop>`_. Accepted formats: prmtop (edam:format_3881), top (edam:format_3880), tpr (edam:format_2333), psf (edam:format_3882).
         output_trajectory_filepath (str): Output XTC trajectory file with the filtered, imaged and fitted coordinates. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_trajectory.xtc>`_. Accepted formats: xtc (edam:format_3875).
-        output_structure_filepath (str): Output PDB structure file with the filtered, imaged and fitted coordinates. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_structure.pdb>`_. Accepted formats: pdb (edam:format_1476).
+        output_structure_filepath (str): Output mmCIF structure file with the filtered, imaged and fitted coordinates. File type: output. `Sample file <https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_structure.cif>`_. Accepted formats: cif (edam:format_1477).
         properties (dic):
             * **filter** (*str*) - (False) Removed atoms from the system. A custom atom selection may be passed using VMD selection syntax. Pass the label 'def' to remove water and counter ions by default
             * **image** (*bool*) - (False) Set if the workflow must attempt to automatically image the system (remove Periodic Boundary Conditions where pertinent). WARNING: This is a simple default imaging protocol and may fail in many cases.
-            * **fit** (*bool*) - (False) Set if the workflow must attempt to automatically ift the system (remove rotation and translation where pertinent).
-            * **binary_path** (*str*) - ("mwf") Example of executable binary property.
+            * **fit** (*bool*) - (False) Set if the workflow must attempt to automatically fit the system (remove rotation and translation where pertinent).
+            * **binary_path** (*str*) - ("mwf") Path to the MDDB workflow executable binary.
             * **remove_tmp** (*bool*) - (True) [WF property] Remove temporal files.
             * **restart** (*bool*) - (False) [WF property] Do not execute if output files exist.
             * **sandbox_path** (*str*) - ("./") [WF property] Parent path to the sandbox directory.
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
-            * **container_image** (*str*) - ("mddb/mddb:latest") Container Image identifier.
+            * **container_image** (*str*) - ("ghcr.io/mmb-irb/mddb_wf:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
             * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
@@ -43,14 +43,14 @@ class InputProcessing(BiobbObject):
     Examples:
         This is a use example of how to use the building block from Python::
 
-            from biobb_mddb.workflow.workflow import input_processing
+            from biobb_mddb.workflow.input_processing import input_processing
 
             prop = { 'filter': True, 'image': False, 'fit': False }
             input_processing(input_topology_filepath='/path/to/my_topology.prmtop',
                     input_trajectory_filepath='/path/to/my_input_trajectory.dcd',
                     output_topology_filepath='/path/to/output_topology.prmtop',
                     output_trajectory_filepath='/path/to/output_trajectory.xtc',
-                    output_structure_filepath='/path/to/output_structure.pdb',
+                    output_structure_filepath='/path/to/output_structure.cif',
                     properties=prop)
 
     Info:
@@ -126,8 +126,8 @@ class InputProcessing(BiobbObject):
         if self.image:
             instructions.append('-img')
             fu.log('Appending optional boolean property', self.out_log, self.global_log)
-        if self.filter:
-            instructions.append(f'-fit')
+        if self.fit:
+            instructions.append('-fit')
             fu.log('Appending optional boolean property', self.out_log, self.global_log)
 
         # Build the actual command line as a list of items (elements order will be maintained)
@@ -142,15 +142,15 @@ class InputProcessing(BiobbObject):
 
         # Run Biobb block
         self.run_biobb()
+        if self.return_code != 0:
+            raise RuntimeError(f'MDDB workflow failed with exit code {self.return_code}. Check the logs.')
 
         # Make sure there is only one possible output topology file
         output_topology_glob = glob(str(PurePath(self.stage_io_dict['unique_dir']).joinpath('topology.*')))
         if len(output_topology_glob) == 0:
-            fu.log('The expected output topology file is nowhere to be found', self.err_log, self.global_log)
-            return 1
+            raise FileNotFoundError('The expected output topology file is nowhere to be found')
         if len(output_topology_glob) > 1:
-            fu.log(f'There are multiple files which could be the output topology: {", ".join(output_topology_glob)}', self.err_log, self.global_log)
-            return 1
+            raise RuntimeError(f'There are multiple files which could be the output topology: {", ".join(output_topology_glob)}')
         expected_output_topology_filename = output_topology_glob[0].split('/')[-1]
 
         # Move output files to the expected location

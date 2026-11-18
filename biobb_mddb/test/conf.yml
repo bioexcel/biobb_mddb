@@ -1,29 +1,6 @@
 global_properties:
   working_dir_path: /tmp/biobb/unitests
 
-rmsd_per_residue:
-  paths:
-    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
-    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
-    input_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
-    ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
-    output_analysis_filepath: mda.rmsd_perres.json
-  properties:
-    remove_tmp: true
-
-rmsd_per_residue_docker:
-  paths:
-    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
-    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
-    input_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
-    ref_output_analysis_filepath: file:test_data_dir/workflow/mda.rmsd_perres.json
-    output_analysis_filepath: mda.rmsd_perres.json
-  properties:
-    remove_tmp: true
-    container_path: docker
-    container_image: ghcr.io/mmb-irb/mddb_wf:latest
-    container_user_id: '1001'
-
 input_processing:
   paths:
     input_topology_filepath: file:test_data_dir/workflow/input_topology.top
@@ -32,10 +9,272 @@ input_processing:
     output_topology_filepath: output_topology.prmtop
     ref_output_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
     output_trajectory_filepath: output_trajectory.xtc
-    ref_output_structure_filepath: file:test_data_dir/workflow/output_structure.pdb
-    output_structure_filepath: output_structure.pdb
+    ref_output_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    output_structure_filepath: output_structure.cif
   properties:
     filter: false
     image: false
     fit: false
+    remove_tmp: true
+
+rmsd_per_residue_docker:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_rmsd_per_residue.json
+    output_analysis_filepath: rmsd_per_residue.json
+  properties:
+    remove_tmp: true
+    container_path: docker
+    container_image: ghcr.io/mmb-irb/mddb_wf:latest
+    container_user_id: '1001'
+
+rmsds:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_rmsds.json
+    output_analysis_filepath: rmsds.json
+  properties:
+    remove_tmp: true
+
+tmscores:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_tmscores.json
+    output_analysis_filepath: tmscores.json
+  properties:
+    remove_tmp: true
+
+rmsf:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_rmsf.json
+    output_analysis_filepath: rmsf.json
+  properties:
+    remove_tmp: true
+
+rgyr:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_rgyr.json
+    output_analysis_filepath: rgyr.json
+  properties:
+    remove_tmp: true
+
+pca:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_pca.json
+    output_analysis_filepath: pca.json
+    output_projections_zip_path: pca_projections.zip
+  properties:
+    remove_tmp: true
+
+rmsd_per_residue:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_rmsd_per_residue.json
+    output_analysis_filepath: rmsd_per_residue.json
+  properties:
+    remove_tmp: true
+
+rmsd_pairwise:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/inputs_interactions.json
+    output_analysis_zip_path: rmsd_pairwise.zip
+  properties:
+    remove_tmp: true
+
+clusters:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/inputs_interactions.json
+    output_analysis_zip_path: clusters.zip
+  properties:
+    remove_tmp: true
+
+distance_per_residue:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/inputs_interactions.json
+    output_analysis_zip_path: distance_per_residue.zip
+  properties:
+    remove_tmp: true
+
+hydrogen_bonds:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/inputs_interactions.json
+    output_analysis_zip_path: hydrogen_bonds.zip
+  properties:
+    remove_tmp: true
+
+sasa:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_sasa.json
+    output_analysis_filepath: sasa.json
+  properties:
+    remove_tmp: true
+
+energies:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/inputs_interactions.json
+    output_analysis_zip_path: energies.zip
+  properties:
+    remove_tmp: true
+    energies_engine: gridfree
+
+dihedral_energies:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/dna_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/dna_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/dna_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_dihedral_energies.json
+    output_analysis_filepath: dihedral_energies.json
+  properties:
+    remove_tmp: true
+
+pockets:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_pockets.json
+    output_analysis_filepath: pockets.json
+    output_pockets_zip_path: pockets_pockets.zip
+  properties:
+    remove_tmp: true
+
+allostery:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_allostery.json
+    output_analysis_filepath: allostery.json
+  properties:
+    remove_tmp: true
+
+chemical_shifts:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_chemical_shifts.json
+    output_analysis_filepath: chemical_shifts.json
+  properties:
+    remove_tmp: true
+
+helical_parameters:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/dna_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/dna_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/dna_trajectory.xtc
+    output_analysis_zip_path: helical_parameters.zip
+  properties:
+    remove_tmp: true
+
+markov:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
+    input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_populations_filepath: file:test_data_dir/workflow/populations.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_markov.json
+    output_analysis_filepath: markov.json
+    output_screenshots_zip_path: markov_screenshots.zip
+  properties:
+    remove_tmp: true
+
+membrane_density:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/membrane_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/membrane_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/membrane_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_membrane_density.json
+    output_analysis_filepath: membrane_density.json
+  properties:
+    remove_tmp: true
+
+membrane_thickness:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/membrane_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/membrane_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/membrane_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_membrane_thickness.json
+    output_analysis_filepath: membrane_thickness.json
+  properties:
+    remove_tmp: true
+
+area_per_lipid:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/membrane_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/membrane_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/membrane_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_area_per_lipid.json
+    output_analysis_filepath: area_per_lipid.json
+  properties:
+    remove_tmp: true
+
+lipid_order:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/membrane_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/membrane_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/membrane_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_lipid_order.json
+    output_analysis_filepath: lipid_order.json
+  properties:
+    remove_tmp: true
+
+lipid_interactions:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/membrane_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/membrane_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/membrane_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_lipid_interactions.json
+    output_analysis_filepath: lipid_interactions.json
+  properties:
+    remove_tmp: true
+
+membrane_channels:
+  paths:
+    input_topology_filepath: file:test_data_dir/workflow/channel_topology.tpr
+    input_structure_filepath: file:test_data_dir/workflow/channel_structure.cif
+    input_trajectory_filepath: file:test_data_dir/workflow/channel_trajectory.xtc
+    input_inputs_filepath: file:test_data_dir/workflow/membrane_inputs.json
+    output_analysis_filepath: membrane_channels.json
+  properties:
     remove_tmp: true

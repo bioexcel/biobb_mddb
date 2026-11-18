@@ -1,6 +1,5 @@
 {
   "properties": {
-    "skip_processing": false,
     "remove_tmp": true
   }
 }

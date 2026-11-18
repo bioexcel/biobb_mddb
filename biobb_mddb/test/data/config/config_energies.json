@@ -1,0 +1,6 @@
+{
+  "properties": {
+    "remove_tmp": true,
+    "energies_engine": "gridfree"
+  }
+}

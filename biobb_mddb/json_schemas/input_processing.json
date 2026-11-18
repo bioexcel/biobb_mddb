@@ -1,0 +1,264 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_mddb/json_schemas/1.0/input_processing",
+    "name": "biobb_mddb InputProcessing",
+    "title": "Wrapper of the Input processing steps from MDDB workflow module.",
+    "description": "Process input raw files by converting, filtering, imaging, fitting, and finally quality-checking the output files.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "MDDB Workflow",
+            "version": ">=0.1.11",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_topology_filepath",
+        "input_trajectory_filepath",
+        "output_topology_filepath",
+        "output_trajectory_filepath",
+        "output_structure_filepath"
+    ],
+    "properties": {
+        "input_topology_filepath": {
+            "type": "string",
+            "description": "Input topology or structure file",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_topology.top",
+            "enum": [
+                ".*\\.pdb$",
+                ".*\\.gro$",
+                ".*\\.prmtop$",
+                ".*\\.top$",
+                ".*\\.itp$",
+                ".*\\.tpr$",
+                ".*\\.psf$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_1476"
+                },
+                {
+                    "extension": ".*\\.gro$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_2033"
+                },
+                {
+                    "extension": ".*\\.prmtop$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_3881"
+                },
+                {
+                    "extension": ".*\\.top$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_3880"
+                },
+                {
+                    "extension": ".*\\.itp$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_3883"
+                },
+                {
+                    "extension": ".*\\.tpr$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_2333"
+                },
+                {
+                    "extension": ".*\\.psf$",
+                    "description": "Input topology or structure file",
+                    "edam": "format_3882"
+                }
+            ]
+        },
+        "input_trajectory_filepath": {
+            "type": "string",
+            "description": "Input trajectory file",
+            "filetype": "input",
+            "sample": "https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/input_trajectory.dcd",
+            "enum": [
+                ".*\\.xtc$",
+                ".*\\.trr$",
+                ".*\\.dcd$",
+                ".*\\.nc$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.xtc$",
+                    "description": "Input trajectory file",
+                    "edam": "format_3875"
+                },
+                {
+                    "extension": ".*\\.trr$",
+                    "description": "Input trajectory file",
+                    "edam": "format_3910"
+                },
+                {
+                    "extension": ".*\\.dcd$",
+                    "description": "Input trajectory file",
+                    "edam": "format_3878"
+                },
+                {
+                    "extension": ".*\\.nc$",
+                    "description": "Input trajectory file",
+                    "edam": "format_3650"
+                }
+            ]
+        },
+        "output_topology_filepath": {
+            "type": "string",
+            "description": "Output topology file, with a filtered set of atoms matching the trajectory",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_topology.prmtop",
+            "enum": [
+                ".*\\.prmtop$",
+                ".*\\.top$",
+                ".*\\.tpr$",
+                ".*\\.psf$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.prmtop$",
+                    "description": "Output topology file, with a filtered set of atoms matching the trajectory",
+                    "edam": "format_3881"
+                },
+                {
+                    "extension": ".*\\.top$",
+                    "description": "Output topology file, with a filtered set of atoms matching the trajectory",
+                    "edam": "format_3880"
+                },
+                {
+                    "extension": ".*\\.tpr$",
+                    "description": "Output topology file, with a filtered set of atoms matching the trajectory",
+                    "edam": "format_2333"
+                },
+                {
+                    "extension": ".*\\.psf$",
+                    "description": "Output topology file, with a filtered set of atoms matching the trajectory",
+                    "edam": "format_3882"
+                }
+            ]
+        },
+        "output_trajectory_filepath": {
+            "type": "string",
+            "description": "Output XTC trajectory file with the filtered, imaged and fitted coordinates",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_trajectory.xtc",
+            "enum": [
+                ".*\\.xtc$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.xtc$",
+                    "description": "Output XTC trajectory file with the filtered, imaged and fitted coordinates",
+                    "edam": "format_3875"
+                }
+            ]
+        },
+        "output_structure_filepath": {
+            "type": "string",
+            "description": "Output mmCIF structure file with the filtered, imaged and fitted coordinates",
+            "filetype": "output",
+            "sample": "https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/workflow/output_structure.cif",
+            "enum": [
+                ".*\\.cif$"
+            ],
+            "file_formats": [
+                {
+                    "extension": ".*\\.cif$",
+                    "description": "Output mmCIF structure file with the filtered, imaged and fitted coordinates",
+                    "edam": "format_1477"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "type": "string",
+                    "default": "False",
+                    "wf_prop": false,
+                    "description": "Removed atoms from the system. A custom atom selection may be passed using VMD selection syntax. Pass the label 'def' to remove water and counter ions by default"
+                },
+                "image": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Set if the workflow must attempt to automatically image the system (remove Periodic Boundary Conditions where pertinent). WARNING: This is a simple default imaging protocol and may fail in many cases."
+                },
+                "fit": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Set if the workflow must attempt to automatically fit the system (remove rotation and translation where pertinent)."
+                },
+                "binary_path": {
+                    "type": "string",
+                    "default": "mwf",
+                    "wf_prop": false,
+                    "description": "Path to the MDDB workflow executable binary."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": true,
+                    "description": "Remove temporal files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": true,
+                    "description": "Do not execute if output files exist."
+                },
+                "sandbox_path": {
+                    "type": "string",
+                    "default": "./",
+                    "wf_prop": true,
+                    "description": "Parent path to the sandbox directory."
+                },
+                "container_path": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Path to the binary executable of your container."
+                },
+                "container_image": {
+                    "type": "string",
+                    "default": "ghcr.io/mmb-irb/mddb_wf:latest",
+                    "wf_prop": false,
+                    "description": "Container Image identifier."
+                },
+                "container_volume_path": {
+                    "type": "string",
+                    "default": "/data",
+                    "wf_prop": false,
+                    "description": "Path to an internal directory in the container."
+                },
+                "container_working_dir": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Path to the internal CWD in the container."
+                },
+                "container_user_id": {
+                    "type": "string",
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "User number id to be mapped inside the container."
+                },
+                "container_shell_path": {
+                    "type": "string",
+                    "default": "/bin/bash",
+                    "wf_prop": false,
+                    "description": "Path to the binary executable of the container shell."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}
