@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: utils/generate.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="utils.generate.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               utils/generate.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F541">
+               <span class="count sev-1">
+                  3
+               </span>
+               <strong>F541:</strong> f-string is missing placeholders
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="utils.generate.source.html#l105">
+                  <tt><i>105</i>     <span class="n">example_args</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"input_topology_filepath='/path/to/topology.prmtop'"</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l106">
+                  <tt><i>106</i>                     <span class="sa">f</span><span class="s2">"input_structure_filepath='/path/to/structure.cif'"</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l107">
+                  <tt><i>107</i>                     <span class="sa">f</span><span class="s2">"input_trajectory_filepath='/path/to/trajectory.xtc'"</span><span class="p">]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E701">
+               <span class="count sev-2">
+                  11
+               </span>
+               <strong>E701:</strong> multiple statements on one line (colon)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="utils.generate.source.html#l61">
+                  <tt><i>61</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_inputs'</span><span class="p">):</span> <span class="n">names</span><span class="p">[</span><span class="s1">'input_inputs_filepath'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'inputs_interactions.json'</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l62">
+                  <tt><i>62</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'populations'</span><span class="p">):</span> <span class="n">names</span><span class="p">[</span><span class="s1">'input_populations_filepath'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'populations.json'</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l73">
+                  <tt><i>73</i>     <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'output_analysis_filepath'</span><span class="p">,</span> <span class="s1">'output_analysis_zip_path'</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">spec</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1">'</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l108">
+                  <tt><i>108</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'populations'</span><span class="p">):</span> <span class="n">example_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"input_populations_filepath='/path/to/populations.json'"</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l123">
+                  <tt><i>123</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'populations'</span><span class="p">):</span> <span class="n">in_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'input_populations_filepath'</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l134">
+                  <tt><i>134</i>     <span class="k">if</span> <span class="n">prop_assign</span><span class="p">:</span> <span class="n">prop_assign</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">        # Properties specific for BB</span><span class="se">\n</span><span class="s1">'</span> <span class="o">+</span> <span class="n">prop_assign</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l141">
+                  <tt><i>141</i>     <span class="k">if</span> <span class="n">input_fields</span><span class="p">:</span> <span class="n">class_attrs</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'    input_fields = </span><span class="si">{</span><span class="n">input_fields</span><span class="si">!r}</span><span class="se">\n</span><span class="s1">'</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l142">
+                  <tt><i>142</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'input_defaults'</span><span class="p">):</span> <span class="n">class_attrs</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"    input_defaults = </span><span class="si">{</span><span class="n">spec</span><span class="p">[</span><span class="s1">'input_defaults'</span><span class="p">]</span><span class="si">!r}</span><span class="se">\n</span><span class="s2">"</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l143">
+                  <tt><i>143</i>     <span class="k">if</span> <span class="n">cli_properties</span><span class="p">:</span> <span class="n">class_attrs</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'    cli_properties = </span><span class="si">{</span><span class="n">cli_properties</span><span class="si">!r}</span><span class="se">\n</span><span class="s1">'</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l144">
+                  <tt><i>144</i>     <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'populations'</span><span class="p">):</span> <span class="n">class_attrs</span> <span class="o">+=</span> <span class="s2">"    cli_inputs = {'input_populations_filepath': '-pop'}</span><span class="se">\n</span><span class="s2">"</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="utils.generate.source.html#l276">
+                  <tt><i>276</i>         <span class="k">if</span> <span class="n">only</span> <span class="ow">and</span> <span class="n">spec</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">only</span><span class="p">:</span> <span class="k">continue</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: biobb_mddb/workflow/common.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="biobb_mddb.workflow.common.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               biobb_mddb/workflow/common.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E701">
+               <span class="count sev-2">
+                  11
+               </span>
+               <strong>E701:</strong> multiple statements on one line (colon)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l69">
+                  <tt><i>69</i>         <span class="k">if</span> <span class="ow">not</span> <span class="n">original_filepath</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l74">
+                  <tt><i>74</i>         <span class="k">if</span> <span class="n">safe_host_filepath</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">()</span> <span class="ow">or</span> <span class="n">safe_host_filepath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> <span class="n">safe_host_filepath</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l95">
+                  <tt><i>95</i>                 <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">user_inputs_filepath</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">'.json'</span><span class="p">:</span> <span class="n">inputs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l96">
+                  <tt><i>96</i>                 <span class="k">else</span><span class="p">:</span> <span class="n">inputs</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l99">
+                  <tt><i>99</i>             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">continue</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l102">
+                  <tt><i>102</i>             <span class="k">if</span> <span class="n">inputs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">inputs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l103">
+                  <tt><i>103</i>         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l115">
+                  <tt><i>115</i>             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">continue</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l119">
+                  <tt><i>119</i>             <span class="k">if</span> <span class="n">staged_filepath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">continue</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l132">
+                  <tt><i>132</i>             <span class="k">if</span> <span class="ow">not</span> <span class="n">output_filepath</span><span class="p">:</span> <span class="k">continue</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l149">
+                  <tt><i>149</i>             <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Unknown output type </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l138">
+                  <tt><i>138</i>                         <span class="sa">f</span><span class="s1">'Check the workflow logs. Analysis directory content: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">analysis_directory</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="biobb_mddb.workflow.common.source.html#l146">
+                  <tt><i>146</i>                         <span class="s1">'Check the workflow logs.'</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

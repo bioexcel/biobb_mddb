@@ -1,6 +1,8 @@
-2     E111 indentation is not a multiple of 4
-7     E128 continuation line under-indented for visual indent
+1     E111 indentation is not a multiple of 4
+6     E128 continuation line under-indented for visual indent
 1     E302 expected 2 blank lines, found 1
-2     E701 multiple statements on one line (colon)
-2     F541 f-string is missing placeholders
+8     E303 too many blank lines (2)
+1     E401 multiple imports on one line
+26    E701 multiple statements on one line (colon)
+4     F541 f-string is missing placeholders
 1     W292 no newline at end of file
