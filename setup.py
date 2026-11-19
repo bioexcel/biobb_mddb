@@ -19,7 +19,7 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(exclude=['docs', 'test']),
     package_data={'biobb_mddb': ['py.typed']},
-    install_requires=['biobb_common==5.2.2'],
+    install_requires=['biobb_common==5.3.1'],
     python_requires='>=3.11',
     entry_points={
         "console_scripts": [
