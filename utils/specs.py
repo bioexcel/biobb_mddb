@@ -52,7 +52,7 @@ SPECS = [
     dict(name='tmscores', cls='Tmscores', flag='tmscore', module='tmscores.py',
          title='TM scores analysis', short='TM scores along the trajectory against the first frame and the average structure.',
          long='Calculate the TM score of every frame along the trajectory against the first frame and the average structure, using a sampling of frames.',
-         props=['pbc_selection'],
+         props=['pbc_selection'], nondeterministic=True,
          outputs=[('output_analysis_filepath', 'file', 'mda.tmscores.json', 'TM scores analysis results', 'json')]),
     dict(name='rmsf', cls='Rmsf', flag='rmsf', module='rmsf.py',
          title='Fluctuation analysis', short='RMSF, the fluctuation of every atom along the trajectory.',

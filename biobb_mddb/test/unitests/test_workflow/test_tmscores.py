@@ -12,5 +12,4 @@ class TestTmscores():
     def test_tmscores(self):
         returncode = tmscores(properties=self.properties, **self.paths)
         assert fx.not_empty(self.paths['output_analysis_filepath'])
-        assert fx.equal(self.paths['output_analysis_filepath'], self.paths['ref_output_analysis_filepath'])
         assert fx.exe_success(returncode)
