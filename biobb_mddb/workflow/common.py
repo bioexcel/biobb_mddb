@@ -3,7 +3,6 @@
 """Common base class for the MDDB workflow analysis building blocks."""
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 from pathlib import Path, PurePath
 from glob import glob
 import shlex
@@ -148,14 +147,8 @@ class MddbAnalysis(BiobbObject):
                 fu.zip_list(sandbox_output_filepath, workflow_filepaths, self.out_log)
             else: raise ValueError(f'Unknown output type {output_type}')
 
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the MDDB workflow analysis."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Set the path to the sandbox as seen by the workflow
         self.sandbox = self.stage_io_dict['unique_dir']

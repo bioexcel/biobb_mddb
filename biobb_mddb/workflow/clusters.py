@@ -100,11 +100,6 @@ class Clusters(MddbAnalysis):
         self.md_type = properties.get('md_type', None)
         self.framestep = properties.get('framestep', None)
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def clusters(input_topology_filepath: str,
              input_structure_filepath: str,

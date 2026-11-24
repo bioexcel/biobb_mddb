@@ -95,11 +95,6 @@ class Pca(MddbAnalysis):
         self.pca_fit_selection = properties.get('pca_fit_selection', None)
         self.pca_analysis_selection = properties.get('pca_analysis_selection', None)
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def pca(input_topology_filepath: str,
         input_structure_filepath: str,

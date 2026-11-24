@@ -90,11 +90,6 @@ class Pockets(MddbAnalysis):
         # Properties specific for BB
         self.pbc_selection = properties.get('pbc_selection', None)
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def pockets(input_topology_filepath: str,
             input_structure_filepath: str,

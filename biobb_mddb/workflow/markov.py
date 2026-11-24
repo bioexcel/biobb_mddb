@@ -95,11 +95,6 @@ class Markov(MddbAnalysis):
         # Properties specific for BB
         self.cg_selection = properties.get('cg_selection', None)
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def markov(input_topology_filepath: str,
            input_structure_filepath: str,

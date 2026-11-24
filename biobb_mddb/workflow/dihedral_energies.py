@@ -81,12 +81,6 @@ class DihedralEnergies(MddbAnalysis):
         }
 
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
-
 def dihedral_energies(input_topology_filepath: str,
                       input_structure_filepath: str,
                       input_trajectory_filepath: str,

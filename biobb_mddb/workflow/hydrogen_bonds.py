@@ -94,11 +94,6 @@ class HydrogenBonds(MddbAnalysis):
         self.interactions = properties.get('interactions', None)
         self.md_type = properties.get('md_type', None)
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def hydrogen_bonds(input_topology_filepath: str,
                    input_structure_filepath: str,

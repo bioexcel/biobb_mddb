@@ -81,12 +81,6 @@ class HelicalParameters(MddbAnalysis):
         }
 
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
-
 def helical_parameters(input_topology_filepath: str,
                        input_structure_filepath: str,
                        input_trajectory_filepath: str,

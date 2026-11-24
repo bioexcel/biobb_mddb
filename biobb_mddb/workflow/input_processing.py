@@ -3,7 +3,6 @@
 """Module containing the InputProcessing class and the command line interface."""
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
 from pathlib import PurePath
 from glob import glob
 import shutil
@@ -94,19 +93,8 @@ class InputProcessing(BiobbObject):
         self.binary_path = properties.get('binary_path', 'mwf')
         self.properties = properties
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
+    def run(self) -> int:
         """Execute the :class:`InputProcessing <workflow.input_processing.InputProcessing>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
 
         # Parse filepaths
         input_topology_filepath = self.stage_io_dict['in']['input_topology_filepath']

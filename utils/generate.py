@@ -196,11 +196,6 @@ class {cls}(MddbAnalysis):
         }}
 {prop_assign}
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
 
 def {name}({func_signature},
 {' ' * (len(name) + 5)}properties: dict | None = None, **kwargs) -> int:

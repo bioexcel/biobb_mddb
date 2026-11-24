@@ -81,12 +81,6 @@ class AreaPerLipid(MddbAnalysis):
         }
 
 
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
-
 def area_per_lipid(input_topology_filepath: str,
                    input_structure_filepath: str,
                    input_trajectory_filepath: str,
