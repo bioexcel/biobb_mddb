@@ -108,7 +108,7 @@ class InputProcessing(BiobbObject):
         # Prepare the command line parameters as instructions list
         instructions = []
         if self.filter:
-            if self.filter == DEFAULT_FILTERING_ALIAS: instructions.append(f'-filt')
+            if self.filter == DEFAULT_FILTERING_ALIAS or self.filter is True: instructions.append(f'-filt')
             else: instructions.append(f'-filt "{self.filter}"')
             fu.log('Appending optional boolean property', self.out_log, self.global_log)
         if self.image:
