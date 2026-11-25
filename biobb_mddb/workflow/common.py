@@ -126,10 +126,9 @@ class MddbAnalysis(BiobbObject):
         if not analysis_directory.exists():
             raise FileNotFoundError(f'The workflow did not generate the analysis directory {analysis_directory}')
         for output_key, (output_type, workflow_filename) in self.outputs.items():
-            output_filepath = self.io_dict['out'].get(output_key)
+            sandbox_output_filepath = self.sandbox_file(output_key)
             # Optional outputs which were not requested
-            if not output_filepath: continue
-            sandbox_output_filepath = str(unique_dir.joinpath(Path(output_filepath).name))
+            if not sandbox_output_filepath: continue
             if output_type == 'file':
                 workflow_filepath = analysis_directory.joinpath(workflow_filename)
                 if not workflow_filepath.exists():

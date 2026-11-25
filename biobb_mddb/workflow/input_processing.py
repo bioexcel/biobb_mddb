@@ -142,13 +142,17 @@ class InputProcessing(BiobbObject):
             raise RuntimeError(f'There are multiple files which could be the output topology: {", ".join(output_topology_glob)}')
         expected_output_topology_filename = output_topology_glob[0].split('/')[-1]
 
-        # Move output files to the expected location
+        # Copy the output files to their paths in the sandbox, BiobbObject.launch() copies them to the host
         expected_output_filepaths = {
-            self.io_dict['out']['output_topology_filepath']: expected_output_topology_filename,
-            self.io_dict['out']['output_trajectory_filepath'] or '': f'{replica_subdirectory}/{DEFAULT_OUTPUT_TRAJECTORY_FILENAME}',
-            self.io_dict['out']['output_structure_filepath']: f'{replica_subdirectory}/{DEFAULT_OUTPUT_STRUCTURE_FILENAME}',
+            'output_topology_filepath': expected_output_topology_filename,
+            'output_trajectory_filepath': f'{replica_subdirectory}/{DEFAULT_OUTPUT_TRAJECTORY_FILENAME}',
+            'output_structure_filepath': f'{replica_subdirectory}/{DEFAULT_OUTPUT_STRUCTURE_FILENAME}',
         }
-        for output_filepath, expected_output_filepath in expected_output_filepaths.items():
+        for output_key, expected_output_filepath in expected_output_filepaths.items():
+            output_filepath = self.sandbox_file(output_key)
+            # Optional outputs which were not requested
+            if not output_filepath:
+                continue
             absolute_filepath = str(PurePath(self.stage_io_dict['unique_dir']).joinpath(expected_output_filepath))
             fu.log(f"copy {absolute_filepath} {output_filepath}", self.out_log, self.global_log)
             shutil.copy(absolute_filepath, output_filepath)
