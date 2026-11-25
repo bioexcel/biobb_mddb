@@ -52,14 +52,6 @@ class MddbAnalysis(BiobbObject):
     cli_properties: dict = {}
     cli_inputs: dict = {}
 
-    def __init__(self, properties=None, **kwargs) -> None:
-        properties = properties or {}
-        # Call parent class constructor
-        super().__init__(properties)
-        # Properties common to all MDDB workflow analyses
-        self.binary_path = properties.get('binary_path', 'mwf')
-        self.properties = properties
-
     def _stage_input(self, key: str) -> str | None:
         """Stage an input file under a safe name in the sandbox and return its path for the command line.
         Note that the workflow may write outputs with the same name than the input file.

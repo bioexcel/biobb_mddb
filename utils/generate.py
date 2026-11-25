@@ -1,7 +1,7 @@
 """Generate the MDDB workflow analysis building block modules, tests and conf.yml entries from specs.py."""
 import sys
 from pathlib import Path
-from specs import SPECS, PROPS, INPUT_FIELDS, CLI_ARGS, DEFAULTS, WF_URL, SAMPLE, REFERENCE
+from specs import SPECS, PROPS, INPUT_FIELDS, CLI_ARGS, WF_URL, SAMPLE, REFERENCE
 
 # Repository root (this file lives in <repo>/utils)
 REPO = Path(__file__).resolve().parent.parent
@@ -122,16 +122,11 @@ def build_module(spec):
     in_keys = ['input_topology_filepath', 'input_structure_filepath', 'input_trajectory_filepath']
     if spec.get('populations'): in_keys.append('input_populations_filepath')
     in_keys.append('input_inputs_filepath')
-    out_keys = [o[0] for o in outputs]
     required_args = [k for k in in_keys if k != 'input_inputs_filepath'] + [o[0] for o in outputs if o[1] != 'glob']
     optional_args = ['input_inputs_filepath'] + [o[0] for o in outputs if o[1] == 'glob']
     signature_items = [f'{k}: str' for k in required_args] + [f'{k}: str | None = None' for k in optional_args]
     class_signature = (',\n' + ' ' * 17).join(signature_items)
     func_signature = (',\n' + ' ' * (len(name) + 5)).join(signature_items)
-    io_in = '\n'.join(f"                '{k}': {k}," for k in in_keys)
-    io_out = '\n'.join(f"                '{k}': {k}," for k in out_keys)
-    prop_assign = '\n'.join(f"        self.{p} = properties.get('{p}', {DEFAULTS.get(p).__repr__() if p in DEFAULTS else None})" for p in props)
-    if prop_assign: prop_assign = '\n        # Properties specific for BB\n' + prop_assign
 
     # --- Class attributes ---
     outputs_attr = ',\n'.join(f"        '{o[0]}': ('{o[1]}', {o[2]!r})" for o in outputs)
@@ -179,22 +174,7 @@ class {cls}(MddbAnalysis):
 {class_attrs}
     def __init__(self, {class_signature},
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {{}}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {{
-            'in': {{
-{io_in}
-            }},
-            'out': {{
-{io_out}
-            }}
-        }}
-{prop_assign}
+        super().__init__(**locals())
 
 
 def {name}({func_signature},

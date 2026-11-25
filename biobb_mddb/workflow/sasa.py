@@ -63,27 +63,7 @@ class Sasa(MddbAnalysis):
                  output_analysis_filepath: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_filepath': output_analysis_filepath,
-            }
-        }
-
-        # Properties specific for BB
-        self.pbc_selection = properties.get('pbc_selection', None)
+        super().__init__(**locals())
 
 
 def sasa(input_topology_filepath: str,

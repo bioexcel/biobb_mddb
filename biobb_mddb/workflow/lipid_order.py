@@ -61,24 +61,7 @@ class LipidOrder(MddbAnalysis):
                  output_analysis_filepath: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_filepath': output_analysis_filepath,
-            }
-        }
+        super().__init__(**locals())
 
 
 def lipid_order(input_topology_filepath: str,

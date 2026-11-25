@@ -61,24 +61,7 @@ class HelicalParameters(MddbAnalysis):
                  output_analysis_zip_path: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_zip_path': output_analysis_zip_path,
-            }
-        }
+        super().__init__(**locals())
 
 
 def helical_parameters(input_topology_filepath: str,

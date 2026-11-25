@@ -71,29 +71,7 @@ class Markov(MddbAnalysis):
                  input_inputs_filepath: str | None = None,
                  output_screenshots_zip_path: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_populations_filepath': input_populations_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_filepath': output_analysis_filepath,
-                'output_screenshots_zip_path': output_screenshots_zip_path,
-            }
-        }
-
-        # Properties specific for BB
-        self.cg_selection = properties.get('cg_selection', None)
+        super().__init__(**locals())
 
 
 def markov(input_topology_filepath: str,

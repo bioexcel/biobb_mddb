@@ -36,10 +36,6 @@ CLI_ARGS = {
 }
 
 # Default values (only for properties with a default which is not None)
-DEFAULTS = {
-    'energies_engine': 'cmip',
-}
-
 INTERACTIONS_NOTE = 'Interactions must be defined, either through the interactions property or the inputs file.'
 MEMBRANE_NOTE = 'The system must include a membrane. Lipids are identified automatically, but non-standard lipid residue names may be forced through the forced_lipids field in the inputs file.'
 

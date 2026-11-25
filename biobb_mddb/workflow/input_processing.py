@@ -66,32 +66,7 @@ class InputProcessing(BiobbObject):
     def __init__(self, input_topology_filepath: str, input_trajectory_filepath: str,
             output_topology_filepath: str, output_trajectory_filepath: str,
             output_structure_filepath: str, properties=None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Modify to match constructor parameters
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-            },
-            'out': {
-                'output_topology_filepath': output_topology_filepath,
-                'output_trajectory_filepath': output_trajectory_filepath,
-                'output_structure_filepath': output_structure_filepath,
-            }
-        }
-
-        # Properties specific for BB
-        self.filter = properties.get('filter', False)
-        self.image = properties.get('image', False)
-        self.fit = properties.get('fit', False)
-        self.binary_path = properties.get('binary_path', 'mwf')
-        self.properties = properties
+        super().__init__(**locals())
 
     def run(self) -> None:
         """Execute the :class:`InputProcessing <workflow.input_processing.InputProcessing>` object."""
