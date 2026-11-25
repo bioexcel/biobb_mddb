@@ -158,7 +158,7 @@ class InputProcessing(BiobbObject):
 
         # Remove temporary file(s)
         if self.disable_sandbox and self.remove_tmp:
-            self.tmp_files.extend([replica_subdirectory, "topology.prmtop"])
+            self.tmp_files.extend([replica_subdirectory, expected_output_topology_filename])
         self.remove_tmp_files()
 
         # Check output arguments
