@@ -93,7 +93,7 @@ class InputProcessing(BiobbObject):
         self.binary_path = properties.get('binary_path', 'mwf')
         self.properties = properties
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the :class:`InputProcessing <workflow.input_processing.InputProcessing>` object."""
 
         # Parse filepaths
@@ -153,18 +153,9 @@ class InputProcessing(BiobbObject):
             fu.log(f"copy {absolute_filepath} {output_filepath}", self.out_log, self.global_log)
             shutil.copy(absolute_filepath, output_filepath)
 
-        # Copy files to host
-        self.copy_to_host()
-
         # Remove temporary file(s)
         if self.disable_sandbox and self.remove_tmp:
             self.tmp_files.extend([replica_subdirectory, expected_output_topology_filename])
-        self.remove_tmp_files()
-
-        # Check output arguments
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
 
 
 def input_processing(input_trajectory_filepath: str, input_topology_filepath: str = None,

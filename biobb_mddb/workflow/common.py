@@ -147,7 +147,7 @@ class MddbAnalysis(BiobbObject):
                 fu.zip_list(sandbox_output_filepath, workflow_filepaths, self.out_log)
             else: raise ValueError(f'Unknown output type {output_type}')
 
-    def run(self) -> int:
+    def run(self) -> None:
         """Execute the MDDB workflow analysis."""
 
         # Set the path to the sandbox as seen by the workflow
@@ -189,16 +189,9 @@ class MddbAnalysis(BiobbObject):
 
         # Move output files to the sandbox and then copy them to host
         self._collect_outputs()
-        self.copy_to_host()
 
         # Remove temporary file(s)
         # Note that the sandbox is already in the temporary files list unless the sandbox is disabled
         if self.disable_sandbox:
             for pattern in WORKFLOW_PROJECT_FILES:
                 self.tmp_files.extend(glob(str(Path(self.stage_io_dict['unique_dir']).joinpath(pattern))))
-        self.remove_tmp_files()
-
-        # Check output arguments
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
