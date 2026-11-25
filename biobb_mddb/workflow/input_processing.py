@@ -125,7 +125,8 @@ class InputProcessing(BiobbObject):
         # DANI: Esto hace falta para los dockers, sino falla al borrar los archivos en /tmp
         # DANI: Otra alternativa es poner el en conf.yml 'remove_tmp: false'
         if self.container_path:
-           self.cmd.append('; chmod a+w -R ' + str(PurePath(sandbox).joinpath(replica_subdirectory)))
+           # Keep the exit code of the workflow, not the one of chmod
+           self.cmd.append('; rc=\\$?; chmod a+w -R ' + str(PurePath(sandbox).joinpath(replica_subdirectory)) + '; exit \\$rc')
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
 
         # Run Biobb block
