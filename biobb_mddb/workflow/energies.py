@@ -2,6 +2,7 @@
 
 """Module containing the Energies class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Energies(MddbAnalysis):
@@ -75,20 +76,8 @@ class Energies(MddbAnalysis):
         super().__init__(**locals())
 
 
-def energies(input_topology_filepath: str,
-             input_structure_filepath: str,
-             input_trajectory_filepath: str,
-             output_analysis_zip_path: str,
-             input_inputs_filepath: str | None = None,
-             properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Energies <workflow.energies.Energies>` class and
-    execute the :meth:`launch() <workflow.energies.Energies.launch>` method."""
-    return Energies(**dict(locals())).launch()
-
-
-energies.__doc__ = Energies.__doc__
-main = Energies.get_main(energies, 'Electrostatic and van der Waals energies in the interface of every interaction.')
+energies = launcher(Energies)
 
 
 if __name__ == '__main__':
-    main()
+    Energies.main()

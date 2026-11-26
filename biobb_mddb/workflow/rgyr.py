@@ -2,6 +2,7 @@
 
 """Module containing the Rgyr class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Rgyr(MddbAnalysis):
@@ -66,20 +67,8 @@ class Rgyr(MddbAnalysis):
         super().__init__(**locals())
 
 
-def rgyr(input_topology_filepath: str,
-         input_structure_filepath: str,
-         input_trajectory_filepath: str,
-         output_analysis_filepath: str,
-         input_inputs_filepath: str | None = None,
-         properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Rgyr <workflow.rgyr.Rgyr>` class and
-    execute the :meth:`launch() <workflow.rgyr.Rgyr.launch>` method."""
-    return Rgyr(**dict(locals())).launch()
-
-
-rgyr.__doc__ = Rgyr.__doc__
-main = Rgyr.get_main(rgyr, 'Radius of gyration along the trajectory.')
+rgyr = launcher(Rgyr)
 
 
 if __name__ == '__main__':
-    main()
+    Rgyr.main()

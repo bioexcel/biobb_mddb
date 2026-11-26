@@ -2,6 +2,7 @@
 
 """Module containing the RmsdPairwise class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class RmsdPairwise(MddbAnalysis):
@@ -73,20 +74,8 @@ class RmsdPairwise(MddbAnalysis):
         super().__init__(**locals())
 
 
-def rmsd_pairwise(input_topology_filepath: str,
-                  input_structure_filepath: str,
-                  input_trajectory_filepath: str,
-                  output_analysis_zip_path: str,
-                  input_inputs_filepath: str | None = None,
-                  properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`RmsdPairwise <workflow.rmsd_pairwise.RmsdPairwise>` class and
-    execute the :meth:`launch() <workflow.rmsd_pairwise.RmsdPairwise.launch>` method."""
-    return RmsdPairwise(**dict(locals())).launch()
-
-
-rmsd_pairwise.__doc__ = RmsdPairwise.__doc__
-main = RmsdPairwise.get_main(rmsd_pairwise, 'RMSD between every pair of frames.')
+rmsd_pairwise = launcher(RmsdPairwise)
 
 
 if __name__ == '__main__':
-    main()
+    RmsdPairwise.main()

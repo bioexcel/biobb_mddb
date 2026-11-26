@@ -2,6 +2,7 @@
 
 """Module containing the Pockets class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Pockets(MddbAnalysis):
@@ -70,21 +71,8 @@ class Pockets(MddbAnalysis):
         super().__init__(**locals())
 
 
-def pockets(input_topology_filepath: str,
-            input_structure_filepath: str,
-            input_trajectory_filepath: str,
-            output_analysis_filepath: str,
-            input_inputs_filepath: str | None = None,
-            output_pockets_zip_path: str | None = None,
-            properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Pockets <workflow.pockets.Pockets>` class and
-    execute the :meth:`launch() <workflow.pockets.Pockets.launch>` method."""
-    return Pockets(**dict(locals())).launch()
-
-
-pockets.__doc__ = Pockets.__doc__
-main = Pockets.get_main(pockets, 'Pockets and their volume along the trajectory.')
+pockets = launcher(Pockets)
 
 
 if __name__ == '__main__':
-    main()
+    Pockets.main()

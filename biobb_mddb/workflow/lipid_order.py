@@ -2,6 +2,7 @@
 
 """Module containing the LipidOrder class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class LipidOrder(MddbAnalysis):
@@ -64,20 +65,8 @@ class LipidOrder(MddbAnalysis):
         super().__init__(**locals())
 
 
-def lipid_order(input_topology_filepath: str,
-                input_structure_filepath: str,
-                input_trajectory_filepath: str,
-                output_analysis_filepath: str,
-                input_inputs_filepath: str | None = None,
-                properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`LipidOrder <workflow.lipid_order.LipidOrder>` class and
-    execute the :meth:`launch() <workflow.lipid_order.LipidOrder.launch>` method."""
-    return LipidOrder(**dict(locals())).launch()
-
-
-lipid_order.__doc__ = LipidOrder.__doc__
-main = LipidOrder.get_main(lipid_order, 'Lipid tail order parameters.')
+lipid_order = launcher(LipidOrder)
 
 
 if __name__ == '__main__':
-    main()
+    LipidOrder.main()

@@ -2,6 +2,7 @@
 
 """Module containing the HelicalParameters class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class HelicalParameters(MddbAnalysis):
@@ -64,20 +65,8 @@ class HelicalParameters(MddbAnalysis):
         super().__init__(**locals())
 
 
-def helical_parameters(input_topology_filepath: str,
-                       input_structure_filepath: str,
-                       input_trajectory_filepath: str,
-                       output_analysis_zip_path: str,
-                       input_inputs_filepath: str | None = None,
-                       properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`HelicalParameters <workflow.helical_parameters.HelicalParameters>` class and
-    execute the :meth:`launch() <workflow.helical_parameters.HelicalParameters.launch>` method."""
-    return HelicalParameters(**dict(locals())).launch()
-
-
-helical_parameters.__doc__ = HelicalParameters.__doc__
-main = HelicalParameters.get_main(helical_parameters, 'Helical parameters of nucleic acids.')
+helical_parameters = launcher(HelicalParameters)
 
 
 if __name__ == '__main__':
-    main()
+    HelicalParameters.main()

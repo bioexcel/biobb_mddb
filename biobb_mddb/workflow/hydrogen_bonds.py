@@ -2,6 +2,7 @@
 
 """Module containing the HydrogenBonds class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class HydrogenBonds(MddbAnalysis):
@@ -74,20 +75,8 @@ class HydrogenBonds(MddbAnalysis):
         super().__init__(**locals())
 
 
-def hydrogen_bonds(input_topology_filepath: str,
-                   input_structure_filepath: str,
-                   input_trajectory_filepath: str,
-                   output_analysis_zip_path: str,
-                   input_inputs_filepath: str | None = None,
-                   properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`HydrogenBonds <workflow.hydrogen_bonds.HydrogenBonds>` class and
-    execute the :meth:`launch() <workflow.hydrogen_bonds.HydrogenBonds.launch>` method."""
-    return HydrogenBonds(**dict(locals())).launch()
-
-
-hydrogen_bonds.__doc__ = HydrogenBonds.__doc__
-main = HydrogenBonds.get_main(hydrogen_bonds, 'Hydrogen bonds in the interface of every interaction.')
+hydrogen_bonds = launcher(HydrogenBonds)
 
 
 if __name__ == '__main__':
-    main()
+    HydrogenBonds.main()

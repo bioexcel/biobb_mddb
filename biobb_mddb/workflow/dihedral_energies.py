@@ -2,6 +2,7 @@
 
 """Module containing the DihedralEnergies class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class DihedralEnergies(MddbAnalysis):
@@ -64,20 +65,8 @@ class DihedralEnergies(MddbAnalysis):
         super().__init__(**locals())
 
 
-def dihedral_energies(input_topology_filepath: str,
-                      input_structure_filepath: str,
-                      input_trajectory_filepath: str,
-                      output_analysis_filepath: str,
-                      input_inputs_filepath: str | None = None,
-                      properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`DihedralEnergies <workflow.dihedral_energies.DihedralEnergies>` class and
-    execute the :meth:`launch() <workflow.dihedral_energies.DihedralEnergies.launch>` method."""
-    return DihedralEnergies(**dict(locals())).launch()
-
-
-dihedral_energies.__doc__ = DihedralEnergies.__doc__
-main = DihedralEnergies.get_main(dihedral_energies, 'Torsion and energy of every dihedral along the trajectory.')
+dihedral_energies = launcher(DihedralEnergies)
 
 
 if __name__ == '__main__':
-    main()
+    DihedralEnergies.main()

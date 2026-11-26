@@ -2,6 +2,7 @@
 
 """Module containing the ChemicalShifts class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class ChemicalShifts(MddbAnalysis):
@@ -67,20 +68,8 @@ class ChemicalShifts(MddbAnalysis):
         super().__init__(**locals())
 
 
-def chemical_shifts(input_topology_filepath: str,
-                    input_structure_filepath: str,
-                    input_trajectory_filepath: str,
-                    output_analysis_filepath: str,
-                    input_inputs_filepath: str | None = None,
-                    properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`ChemicalShifts <workflow.chemical_shifts.ChemicalShifts>` class and
-    execute the :meth:`launch() <workflow.chemical_shifts.ChemicalShifts.launch>` method."""
-    return ChemicalShifts(**dict(locals())).launch()
-
-
-chemical_shifts.__doc__ = ChemicalShifts.__doc__
-main = ChemicalShifts.get_main(chemical_shifts, 'NMR chemical shifts of protein backbone atoms along the trajectory.')
+chemical_shifts = launcher(ChemicalShifts)
 
 
 if __name__ == '__main__':
-    main()
+    ChemicalShifts.main()

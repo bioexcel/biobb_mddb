@@ -2,6 +2,7 @@
 
 """Module containing the Tmscores class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Tmscores(MddbAnalysis):
@@ -66,20 +67,8 @@ class Tmscores(MddbAnalysis):
         super().__init__(**locals())
 
 
-def tmscores(input_topology_filepath: str,
-             input_structure_filepath: str,
-             input_trajectory_filepath: str,
-             output_analysis_filepath: str,
-             input_inputs_filepath: str | None = None,
-             properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Tmscores <workflow.tmscores.Tmscores>` class and
-    execute the :meth:`launch() <workflow.tmscores.Tmscores.launch>` method."""
-    return Tmscores(**dict(locals())).launch()
-
-
-tmscores.__doc__ = Tmscores.__doc__
-main = Tmscores.get_main(tmscores, 'TM scores along the trajectory against the first frame and the average structure.')
+tmscores = launcher(Tmscores)
 
 
 if __name__ == '__main__':
-    main()
+    Tmscores.main()

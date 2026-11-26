@@ -2,6 +2,7 @@
 
 """Module containing the DistancePerResidue class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class DistancePerResidue(MddbAnalysis):
@@ -72,20 +73,8 @@ class DistancePerResidue(MddbAnalysis):
         super().__init__(**locals())
 
 
-def distance_per_residue(input_topology_filepath: str,
-                         input_structure_filepath: str,
-                         input_trajectory_filepath: str,
-                         output_analysis_zip_path: str,
-                         input_inputs_filepath: str | None = None,
-                         properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`DistancePerResidue <workflow.distance_per_residue.DistancePerResidue>` class and
-    execute the :meth:`launch() <workflow.distance_per_residue.DistancePerResidue.launch>` method."""
-    return DistancePerResidue(**dict(locals())).launch()
-
-
-distance_per_residue.__doc__ = DistancePerResidue.__doc__
-main = DistancePerResidue.get_main(distance_per_residue, 'Average and standard deviation of the distance between interface residues.')
+distance_per_residue = launcher(DistancePerResidue)
 
 
 if __name__ == '__main__':
-    main()
+    DistancePerResidue.main()

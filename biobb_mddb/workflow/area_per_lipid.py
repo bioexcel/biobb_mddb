@@ -2,6 +2,7 @@
 
 """Module containing the AreaPerLipid class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class AreaPerLipid(MddbAnalysis):
@@ -64,20 +65,8 @@ class AreaPerLipid(MddbAnalysis):
         super().__init__(**locals())
 
 
-def area_per_lipid(input_topology_filepath: str,
-                   input_structure_filepath: str,
-                   input_trajectory_filepath: str,
-                   output_analysis_filepath: str,
-                   input_inputs_filepath: str | None = None,
-                   properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`AreaPerLipid <workflow.area_per_lipid.AreaPerLipid>` class and
-    execute the :meth:`launch() <workflow.area_per_lipid.AreaPerLipid.launch>` method."""
-    return AreaPerLipid(**dict(locals())).launch()
-
-
-area_per_lipid.__doc__ = AreaPerLipid.__doc__
-main = AreaPerLipid.get_main(area_per_lipid, 'Area per lipid of the membrane.')
+area_per_lipid = launcher(AreaPerLipid)
 
 
 if __name__ == '__main__':
-    main()
+    AreaPerLipid.main()

@@ -2,6 +2,7 @@
 
 """Module containing the LipidInteractions class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class LipidInteractions(MddbAnalysis):
@@ -64,20 +65,8 @@ class LipidInteractions(MddbAnalysis):
         super().__init__(**locals())
 
 
-def lipid_interactions(input_topology_filepath: str,
-                       input_structure_filepath: str,
-                       input_trajectory_filepath: str,
-                       output_analysis_filepath: str,
-                       input_inputs_filepath: str | None = None,
-                       properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`LipidInteractions <workflow.lipid_interactions.LipidInteractions>` class and
-    execute the :meth:`launch() <workflow.lipid_interactions.LipidInteractions.launch>` method."""
-    return LipidInteractions(**dict(locals())).launch()
-
-
-lipid_interactions.__doc__ = LipidInteractions.__doc__
-main = LipidInteractions.get_main(lipid_interactions, 'Contacts between lipids and other residues.')
+lipid_interactions = launcher(LipidInteractions)
 
 
 if __name__ == '__main__':
-    main()
+    LipidInteractions.main()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """Module containing the InputProcessing class and the command line interface."""
-from biobb_common.generic.biobb_object import BiobbObject
+from biobb_common.generic.biobb_object import BiobbObject, launcher
 from biobb_common.tools import file_utils as fu
 from pathlib import PurePath
 from glob import glob
@@ -65,7 +65,7 @@ class InputProcessing(BiobbObject):
 
     def __init__(self, input_topology_filepath: str, input_trajectory_filepath: str,
             output_topology_filepath: str, output_trajectory_filepath: str,
-            output_structure_filepath: str, properties=None, **kwargs) -> None:
+            output_structure_filepath: str, properties: dict | None = None, **kwargs) -> None:
         super().__init__(**locals())
 
     def run(self) -> None:
@@ -137,20 +137,10 @@ class InputProcessing(BiobbObject):
             self.tmp_files.extend([replica_subdirectory, expected_output_topology_filename])
 
 
-def input_processing(input_trajectory_filepath: str, input_topology_filepath: str = None,
-                    output_topology_filepath: str = None, output_trajectory_filepath: str = None,
-                    output_structure_filepath: str = None, properties: dict | None = None,
-                     **kwargs) -> int:
-    """Create :class:`Workflow <workflow.input_processing.InputProcessing>` class and
-    execute the :meth:`launch() <workflow.input_processing.InputProcessing.launch>` method."""
-    return InputProcessing(**dict(locals())).launch()
-
-
-input_processing.__doc__ = InputProcessing.__doc__
-main = InputProcessing.get_main(input_processing, 'Process raw input files using the MDDB workflow.')
+input_processing = launcher(InputProcessing)
 
 
 if __name__ == '__main__':
-    main()
+    InputProcessing.main()
 
 # 12. Complete documentation strings

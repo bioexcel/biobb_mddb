@@ -2,6 +2,7 @@
 
 """Module containing the MembraneChannels class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class MembraneChannels(MddbAnalysis):
@@ -64,20 +65,8 @@ class MembraneChannels(MddbAnalysis):
         super().__init__(**locals())
 
 
-def membrane_channels(input_topology_filepath: str,
-                      input_structure_filepath: str,
-                      input_trajectory_filepath: str,
-                      output_analysis_filepath: str,
-                      input_inputs_filepath: str | None = None,
-                      properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`MembraneChannels <workflow.membrane_channels.MembraneChannels>` class and
-    execute the :meth:`launch() <workflow.membrane_channels.MembraneChannels.launch>` method."""
-    return MembraneChannels(**dict(locals())).launch()
-
-
-membrane_channels.__doc__ = MembraneChannels.__doc__
-main = MembraneChannels.get_main(membrane_channels, 'Channels across the membrane.')
+membrane_channels = launcher(MembraneChannels)
 
 
 if __name__ == '__main__':
-    main()
+    MembraneChannels.main()

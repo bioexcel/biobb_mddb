@@ -2,6 +2,7 @@
 
 """Module containing the Allostery class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Allostery(MddbAnalysis):
@@ -67,20 +68,8 @@ class Allostery(MddbAnalysis):
         super().__init__(**locals())
 
 
-def allostery(input_topology_filepath: str,
-              input_structure_filepath: str,
-              input_trajectory_filepath: str,
-              output_analysis_filepath: str,
-              input_inputs_filepath: str | None = None,
-              properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Allostery <workflow.allostery.Allostery>` class and
-    execute the :meth:`launch() <workflow.allostery.Allostery.launch>` method."""
-    return Allostery(**dict(locals())).launch()
-
-
-allostery.__doc__ = Allostery.__doc__
-main = Allostery.get_main(allostery, 'Allosteric network, hotspots, communities and cliques.')
+allostery = launcher(Allostery)
 
 
 if __name__ == '__main__':
-    main()
+    Allostery.main()

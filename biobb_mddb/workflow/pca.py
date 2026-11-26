@@ -2,6 +2,7 @@
 
 """Module containing the Pca class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Pca(MddbAnalysis):
@@ -73,21 +74,8 @@ class Pca(MddbAnalysis):
         super().__init__(**locals())
 
 
-def pca(input_topology_filepath: str,
-        input_structure_filepath: str,
-        input_trajectory_filepath: str,
-        output_analysis_filepath: str,
-        input_inputs_filepath: str | None = None,
-        output_projections_zip_path: str | None = None,
-        properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Pca <workflow.pca.Pca>` class and
-    execute the :meth:`launch() <workflow.pca.Pca.launch>` method."""
-    return Pca(**dict(locals())).launch()
-
-
-pca.__doc__ = Pca.__doc__
-main = Pca.get_main(pca, 'Principal component analysis (PCA) of the trajectory.')
+pca = launcher(Pca)
 
 
 if __name__ == '__main__':
-    main()
+    Pca.main()

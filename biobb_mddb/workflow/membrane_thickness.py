@@ -2,6 +2,7 @@
 
 """Module containing the MembraneThickness class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class MembraneThickness(MddbAnalysis):
@@ -64,20 +65,8 @@ class MembraneThickness(MddbAnalysis):
         super().__init__(**locals())
 
 
-def membrane_thickness(input_topology_filepath: str,
-                       input_structure_filepath: str,
-                       input_trajectory_filepath: str,
-                       output_analysis_filepath: str,
-                       input_inputs_filepath: str | None = None,
-                       properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`MembraneThickness <workflow.membrane_thickness.MembraneThickness>` class and
-    execute the :meth:`launch() <workflow.membrane_thickness.MembraneThickness.launch>` method."""
-    return MembraneThickness(**dict(locals())).launch()
-
-
-membrane_thickness.__doc__ = MembraneThickness.__doc__
-main = MembraneThickness.get_main(membrane_thickness, 'Membrane thickness along the trajectory.')
+membrane_thickness = launcher(MembraneThickness)
 
 
 if __name__ == '__main__':
-    main()
+    MembraneThickness.main()

@@ -2,6 +2,7 @@
 
 """Module containing the MembraneDensity class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class MembraneDensity(MddbAnalysis):
@@ -64,20 +65,8 @@ class MembraneDensity(MddbAnalysis):
         super().__init__(**locals())
 
 
-def membrane_density(input_topology_filepath: str,
-                     input_structure_filepath: str,
-                     input_trajectory_filepath: str,
-                     output_analysis_filepath: str,
-                     input_inputs_filepath: str | None = None,
-                     properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`MembraneDensity <workflow.membrane_density.MembraneDensity>` class and
-    execute the :meth:`launch() <workflow.membrane_density.MembraneDensity.launch>` method."""
-    return MembraneDensity(**dict(locals())).launch()
-
-
-membrane_density.__doc__ = MembraneDensity.__doc__
-main = MembraneDensity.get_main(membrane_density, 'Density profile of membrane components along the membrane normal.')
+membrane_density = launcher(MembraneDensity)
 
 
 if __name__ == '__main__':
-    main()
+    MembraneDensity.main()

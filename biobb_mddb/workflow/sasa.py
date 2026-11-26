@@ -2,6 +2,7 @@
 
 """Module containing the Sasa class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Sasa(MddbAnalysis):
@@ -66,20 +67,8 @@ class Sasa(MddbAnalysis):
         super().__init__(**locals())
 
 
-def sasa(input_topology_filepath: str,
-         input_structure_filepath: str,
-         input_trajectory_filepath: str,
-         output_analysis_filepath: str,
-         input_inputs_filepath: str | None = None,
-         properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Sasa <workflow.sasa.Sasa>` class and
-    execute the :meth:`launch() <workflow.sasa.Sasa.launch>` method."""
-    return Sasa(**dict(locals())).launch()
-
-
-sasa.__doc__ = Sasa.__doc__
-main = Sasa.get_main(sasa, 'Solvent accessible surface area (SASA) per residue.')
+sasa = launcher(Sasa)
 
 
 if __name__ == '__main__':
-    main()
+    Sasa.main()

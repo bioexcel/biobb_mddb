@@ -2,6 +2,7 @@
 
 """Module containing the Rmsds class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Rmsds(MddbAnalysis):
@@ -67,20 +68,8 @@ class Rmsds(MddbAnalysis):
         super().__init__(**locals())
 
 
-def rmsds(input_topology_filepath: str,
-          input_structure_filepath: str,
-          input_trajectory_filepath: str,
-          output_analysis_filepath: str,
-          input_inputs_filepath: str | None = None,
-          properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Rmsds <workflow.rmsds.Rmsds>` class and
-    execute the :meth:`launch() <workflow.rmsds.Rmsds.launch>` method."""
-    return Rmsds(**dict(locals())).launch()
-
-
-rmsds.__doc__ = Rmsds.__doc__
-main = Rmsds.get_main(rmsds, 'RMSD along the trajectory against the first frame and the average structure.')
+rmsds = launcher(Rmsds)
 
 
 if __name__ == '__main__':
-    main()
+    Rmsds.main()

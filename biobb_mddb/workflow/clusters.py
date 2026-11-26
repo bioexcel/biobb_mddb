@@ -2,6 +2,7 @@
 
 """Module containing the Clusters class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Clusters(MddbAnalysis):
@@ -77,20 +78,8 @@ class Clusters(MddbAnalysis):
         super().__init__(**locals())
 
 
-def clusters(input_topology_filepath: str,
-             input_structure_filepath: str,
-             input_trajectory_filepath: str,
-             output_analysis_zip_path: str,
-             input_inputs_filepath: str | None = None,
-             properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Clusters <workflow.clusters.Clusters>` class and
-    execute the :meth:`launch() <workflow.clusters.Clusters.launch>` method."""
-    return Clusters(**dict(locals())).launch()
-
-
-clusters.__doc__ = Clusters.__doc__
-main = Clusters.get_main(clusters, 'Conformational clustering of every interaction.')
+clusters = launcher(Clusters)
 
 
 if __name__ == '__main__':
-    main()
+    Clusters.main()

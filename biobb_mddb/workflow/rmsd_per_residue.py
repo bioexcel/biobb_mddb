@@ -2,6 +2,7 @@
 
 """Module containing the RmsdPerResidue class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class RmsdPerResidue(MddbAnalysis):
@@ -66,20 +67,8 @@ class RmsdPerResidue(MddbAnalysis):
         super().__init__(**locals())
 
 
-def rmsd_per_residue(input_topology_filepath: str,
-                     input_structure_filepath: str,
-                     input_trajectory_filepath: str,
-                     output_analysis_filepath: str,
-                     input_inputs_filepath: str | None = None,
-                     properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`RmsdPerResidue <workflow.rmsd_per_residue.RmsdPerResidue>` class and
-    execute the :meth:`launch() <workflow.rmsd_per_residue.RmsdPerResidue.launch>` method."""
-    return RmsdPerResidue(**dict(locals())).launch()
-
-
-rmsd_per_residue.__doc__ = RmsdPerResidue.__doc__
-main = RmsdPerResidue.get_main(rmsd_per_residue, 'Average and standard deviation of the RMSD per residue.')
+rmsd_per_residue = launcher(RmsdPerResidue)
 
 
 if __name__ == '__main__':
-    main()
+    RmsdPerResidue.main()

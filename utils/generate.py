@@ -126,7 +126,6 @@ def build_module(spec):
     optional_args = ['input_inputs_filepath'] + [o[0] for o in outputs if o[1] == 'glob']
     signature_items = [f'{k}: str' for k in required_args] + [f'{k}: str | None = None' for k in optional_args]
     class_signature = (',\n' + ' ' * 17).join(signature_items)
-    func_signature = (',\n' + ' ' * (len(name) + 5)).join(signature_items)
 
     # --- Class attributes ---
     outputs_attr = ',\n'.join(f"        '{o[0]}': ('{o[1]}', {o[2]!r})" for o in outputs)
@@ -143,6 +142,7 @@ def build_module(spec):
 
 """Module containing the {cls} class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class {cls}(MddbAnalysis):
@@ -177,19 +177,11 @@ class {cls}(MddbAnalysis):
         super().__init__(**locals())
 
 
-def {name}({func_signature},
-{' ' * (len(name) + 5)}properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`{cls} <workflow.{name}.{cls}>` class and
-    execute the :meth:`launch() <workflow.{name}.{cls}.launch>` method."""
-    return {cls}(**dict(locals())).launch()
-
-
-{name}.__doc__ = {cls}.__doc__
-main = {cls}.get_main({name}, '{spec['short']}')
+{name} = launcher({cls})
 
 
 if __name__ == '__main__':
-    main()
+    {cls}.main()
 '''
 
 

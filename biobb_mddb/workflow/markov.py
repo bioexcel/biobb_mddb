@@ -2,6 +2,7 @@
 
 """Module containing the Markov class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Markov(MddbAnalysis):
@@ -74,22 +75,8 @@ class Markov(MddbAnalysis):
         super().__init__(**locals())
 
 
-def markov(input_topology_filepath: str,
-           input_structure_filepath: str,
-           input_trajectory_filepath: str,
-           input_populations_filepath: str,
-           output_analysis_filepath: str,
-           input_inputs_filepath: str | None = None,
-           output_screenshots_zip_path: str | None = None,
-           properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Markov <workflow.markov.Markov>` class and
-    execute the :meth:`launch() <workflow.markov.Markov.launch>` method."""
-    return Markov(**dict(locals())).launch()
-
-
-markov.__doc__ = Markov.__doc__
-main = Markov.get_main(markov, 'Data to represent a Markov State Model (MSM).')
+markov = launcher(Markov)
 
 
 if __name__ == '__main__':
-    main()
+    Markov.main()
