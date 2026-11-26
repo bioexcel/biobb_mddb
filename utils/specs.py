@@ -111,6 +111,8 @@ SPECS = [
          title='Pockets analysis',
          long='Find the most persistent pockets in the system using fpocket and mdpocket and calculate their volume along the trajectory, using a sampling of frames. The analysis is skipped if there are atoms under periodic boundary conditions.',
          props=['pbc_selection'], nondeterministic=True,
+         # mdpocket runs once per pocket: the test uses every 5th frame of the protein trajectory (10 frames)
+         test_data={'input_trajectory_filepath': 'pockets_trajectory.xtc'},
          outputs=[('output_analysis_filepath', 'file', 'mda.pockets.json', 'Pockets analysis results', 'json'),
                   ('output_pockets_zip_path', 'glob', 'mdf.pocket*', 'Zip file with the structure of every pocket', 'zip')]),
     dict(name='allostery', standby='Compass is not fully integrated in the MDDB workflow yet', cls='Allostery', flag='allostery', module='allostery.py',

@@ -206,7 +206,8 @@ from biobb_mddb.workflow.{name} import {name}
 
 def build_conf(spec):
     name = spec['name']
-    data = test_data_names(spec)
+    # Slow analyses may be tested with other input files than the samples of their docstring
+    data = test_data_names(spec) | spec.get('test_data', {})
     lines = [f'{name}:', '  paths:']
     for key, filename in data.items():
         lines.append(f'    {key}: file:test_data_dir/workflow/{filename}')
