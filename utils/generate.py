@@ -9,10 +9,12 @@ PKG = REPO / 'biobb_mddb'
 # Blocks written by hand, whose conf.yml entries are kept before the generated ones
 CONF_HEAD_END = '\nrmsds:'
 
-WF_MODULES = {
-    'membrane_density': 'density.py',
-    'membrane_thickness': 'thickness.py',
-    'membrane_channels': 'channels.py',
+# Test system of the blocks: prefix and topology format of its input data files
+TEST_SYSTEMS = {
+    'protein': ('output', 'prmtop'),
+    'dna': ('dna', 'prmtop'),
+    'membrane': ('membrane', 'tpr'),
+    'channel': ('channel', 'tpr'),
 }
 
 EDAM = {'json': 'json (edam:format_3464)', 'zip': 'zip (edam:format_3987)'}
@@ -31,51 +33,38 @@ COMMON_PROPS_TAIL = '''            * **binary_path** (*str*) - ("mwf") Path to t
 def test_data_names(spec):
     """Input data files used by the test of this block."""
     system = spec.get('system', 'protein')
-    if system == 'membrane':
-        names = {
-            'input_topology_filepath': 'membrane_topology.tpr',
-            'input_structure_filepath': 'membrane_structure.cif',
-            'input_trajectory_filepath': 'membrane_trajectory.xtc',
-            'input_inputs_filepath': 'membrane_inputs.json',
-        }
-    elif system == 'channel':
-        names = {
-            'input_topology_filepath': 'channel_topology.tpr',
-            'input_structure_filepath': 'channel_structure.cif',
-            'input_trajectory_filepath': 'channel_trajectory.xtc',
-            'input_inputs_filepath': 'membrane_inputs.json',
-        }
-    elif system == 'dna':
-        names = {
-            'input_topology_filepath': 'dna_topology.prmtop',
-            'input_structure_filepath': 'dna_structure.cif',
-            'input_trajectory_filepath': 'dna_trajectory.xtc',
-        }
-    else:
-        names = {
-            'input_topology_filepath': 'output_topology.prmtop',
-            'input_structure_filepath': 'output_structure.cif',
-            'input_trajectory_filepath': 'output_trajectory.xtc',
-        }
+    prefix, topology_format = TEST_SYSTEMS[system]
+    names = {
+        'input_topology_filepath': f'{prefix}_topology.{topology_format}',
+        'input_structure_filepath': f'{prefix}_structure.cif',
+        'input_trajectory_filepath': f'{prefix}_trajectory.xtc',
+    }
+    # The membrane systems share one inputs file
+    if system in ('membrane', 'channel'): names['input_inputs_filepath'] = 'membrane_inputs.json'
     if spec.get('test_inputs'): names['input_inputs_filepath'] = 'inputs_interactions.json'
     if spec.get('populations'): names['input_populations_filepath'] = 'populations.json'
     return names
 
 
-def reference_name(spec, output):
-    key, otype, wf_filename, desc, ext = output
-    return f'ref_{spec["name"]}{"_" + key.split("_")[1] if key != "output_analysis_filepath" and key != "output_analysis_zip_path" else ""}.{ext}'
-
-
 def output_name(spec, output):
-    key, otype, wf_filename, desc, ext = output
-    if key in ('output_analysis_filepath', 'output_analysis_zip_path'): return f'{spec["name"]}.{ext}'
-    return f'{spec["name"]}_{key.split("_")[1]}.{ext}'
+    """Go from an output to its file name in the tests, e.g. pca.json or pca_projections.zip."""
+    key, ext = output[0], output[4]
+    suffix = '' if key in ('output_analysis_filepath', 'output_analysis_zip_path') else f'_{key.split("_")[1]}'
+    return f'{spec["name"]}{suffix}.{ext}'
+
+
+def reference_name(spec, output):
+    """Go from an output to its reference file name, e.g. ref_pca.json."""
+    return f'ref_{output_name(spec, output)}'
+
+
+def has_reference(spec, output):
+    """Only single file outputs have a reference file in the repository, unless the spec says no_reference."""
+    return output[1] == 'file' and not spec.get('no_reference')
 
 
 def build_module(spec):
     name, cls, flag = spec['name'], spec['cls'], spec['flag']
-    wf_module = WF_MODULES.get(name, spec['module'])
     data = test_data_names(spec)
     outputs = spec['outputs']
     props = spec['props']
@@ -92,8 +81,7 @@ def build_module(spec):
     for output in outputs:
         key, otype, wf_filename, desc, ext = output
         optional = ' (Optional)' if otype == 'glob' else ''
-        # Only single file outputs have a reference file in the repository
-        sample = f' `Sample file <{REFERENCE}/{reference_name(spec, output)}>`_.' if otype == 'file' and not spec.get('no_reference') else ''
+        sample = f' `Sample file <{REFERENCE}/{reference_name(spec, output)}>`_.' if has_reference(spec, output) else ''
         args.append(f'        {key} (str){optional}: {desc}. File type: output.{sample} Accepted formats: {EDAM[ext]}.')
 
     # --- Docstring properties ---
@@ -101,9 +89,9 @@ def build_module(spec):
     properties_doc = '\n'.join(prop_lines + [COMMON_PROPS_TAIL])
 
     # --- Example ---
-    example_args = [f"input_topology_filepath='/path/to/topology.prmtop'",
-                    f"input_structure_filepath='/path/to/structure.cif'",
-                    f"input_trajectory_filepath='/path/to/trajectory.xtc'"]
+    example_args = ["input_topology_filepath='/path/to/topology.prmtop'",
+                    "input_structure_filepath='/path/to/structure.cif'",
+                    "input_trajectory_filepath='/path/to/trajectory.xtc'"]
     if spec.get('populations'): example_args.append("input_populations_filepath='/path/to/populations.json'")
     for output in outputs:
         example_args.append(f"{output[0]}='/path/to/{output_name(spec, output)}'")
@@ -147,7 +135,7 @@ from biobb_common.generic.biobb_object import launcher
 class {cls}(MddbAnalysis):
     """
     | biobb_mddb {cls}
-    | Wrapper of the `{spec['title']} from MDDB workflow <{WF_URL}/{wf_module}>`_ module.
+    | Wrapper of the `{spec['title']} from MDDB workflow <{WF_URL}/{spec['module']}>`_ module.
     | {long_desc}
 
     Args:
@@ -191,7 +179,7 @@ def build_test(spec):
         key = output[0]
         lines.append(f"        assert fx.not_empty(self.paths['{key}'])")
         # Some analyses are not deterministic (e.g. random seeds), so their outputs can not be compared
-        if output[1] == 'file' and not spec.get('nondeterministic') and not spec.get('no_reference'):
+        if has_reference(spec, output) and not spec.get('nondeterministic'):
             lines.append(f"        assert fx.equal(self.paths['{key}'], self.paths['ref_{key}'])")
     asserts = '\n'.join(lines)
     # Blocks in stand by are kept but their tests are skipped
@@ -225,7 +213,7 @@ def build_conf(spec):
     for output in spec['outputs']:
         key = output[0]
         # Some outputs are too big or depend on the run (e.g. they include paths), so they have no reference
-        if output[1] == 'file' and not spec.get('no_reference'):
+        if has_reference(spec, output):
             lines.append(f'    ref_{key}: file:test_reference_dir/workflow/{reference_name(spec, output)}')
         lines.append(f'    {key}: {output_name(spec, output)}')
     lines.append('  properties:')
