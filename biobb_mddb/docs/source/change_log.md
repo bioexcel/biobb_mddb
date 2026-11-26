@@ -11,6 +11,7 @@
 
 - Analysis blocks share a common base class (`workflow/common.py`) and expect the processed mmCIF structure (`.cif`) written by current MDDB workflow versions.
 - `input_processing` writes the output structure in mmCIF format.
+- `input_processing` runs the workflow like the analysis blocks: an input topology named like the processed one (`topology.*`) no longer makes it fail, and paths with spaces or a `filter` selection with quotes are passed correctly.
 - With `disable_sandbox`, the blocks remove what the workflow added to the working directory and nothing else.
 
 ### Fixed

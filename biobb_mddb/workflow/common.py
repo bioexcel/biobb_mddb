@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Common base class for the MDDB workflow analysis building blocks."""
+"""Common base class for the MDDB workflow building blocks: the input processing and the analyses."""
 from biobb_common.generic.biobb_object import BiobbObject
 from biobb_common.tools import file_utils as fu
 from pathlib import Path, PurePath
@@ -23,18 +23,22 @@ STAGED_INPUT_PREFIX = 'biobb_mddb_'
 class MddbAnalysis(BiobbObject):
     """
     | biobb_mddb MddbAnalysis
-    | Base class for MDDB workflow analyses. Not a building block by itself.
+    | Base class for MDDB workflow analyses and input processing. Not a building block by itself.
 
     Subclasses must set the following class attributes:
         * **flag**: The workflow task flag (e.g. 'perres'), as in the '-i' argument of 'mwf run'.
         * **outputs**: Dictionary where keys are output arguments and values are tuples of (output type, workflow output filename).
-          Output types are 'file' (a single file in the analysis directory), 'zip' (the whole analysis directory zipped) and
-          'glob' (a set of files in the analysis directory, zipped). Filename is a glob pattern in the latter.
+          Output types are 'file' (a single file in the outputs directory, filename may be a glob pattern matching one file),
+          'zip' (the whole outputs directory zipped) and 'glob' (a set of files in the outputs directory, zipped). Filename is a glob pattern in the latter.
+          The outputs directory is the analysis directory of the replica, see _outputs_directory().
+        * **processed_inputs**: True (default) if the inputs are already processed (e.g. the outputs of the input processing block),
+          so the workflow skips the processing and checking steps ('--faith').
         * **input_fields**: Dictionary where keys are property names and values are inputs file field names.
           Properties which are not None are written to the inputs file passed to the workflow.
         * **input_defaults**: Dictionary with default values for inputs file fields, used when the field is set neither by properties nor by the user inputs file.
         * **cli_properties**: Dictionary where keys are property names and values are workflow command line flags.
           Properties which are not None are passed to the workflow through the command line.
+          Boolean properties are flags: passed alone when True and not passed when False.
         * **cli_inputs**: Dictionary where keys are additional input file arguments and values are workflow command line flags.
 
     Args:
@@ -45,6 +49,7 @@ class MddbAnalysis(BiobbObject):
     """
     flag: str = ''
     outputs: dict = {}
+    processed_inputs: bool = True
     input_fields: dict = {}
     input_defaults: dict = {}
     cli_properties: dict = {}
@@ -100,43 +105,48 @@ class MddbAnalysis(BiobbObject):
         arguments = []
         for property_name, flag in self.cli_properties.items():
             value = getattr(self, property_name)
-            if value is None: continue
-            arguments += [flag, value]
+            if value is None or value is False: continue
+            arguments += [flag] if value is True else [flag, value]
         for input_key, flag in self.cli_inputs.items():
             staged_filepath = self._stage_input(input_key)
             if staged_filepath is None: continue
             arguments += [flag, staged_filepath]
         return arguments
 
+    def _outputs_directory(self) -> Path:
+        """Go from the sandbox to the directory of the workflow outputs: the analysis directory of the replica."""
+        return Path(self.stage_io_dict['unique_dir'], REPLICA_DIRECTORY, self.flag)
+
     def _collect_outputs(self):
-        """Copy workflow outputs from the analysis directory to the sandbox output paths."""
-        unique_dir = Path(self.stage_io_dict['unique_dir'])
-        analysis_directory = unique_dir.joinpath(REPLICA_DIRECTORY, self.flag)
-        if not analysis_directory.exists():
-            raise FileNotFoundError(f'The workflow did not generate the analysis directory {analysis_directory}')
+        """Copy workflow outputs from the outputs directory to the sandbox output paths."""
+        outputs_directory = self._outputs_directory()
+        if not outputs_directory.exists():
+            raise FileNotFoundError(f'The workflow did not generate the outputs directory {outputs_directory}')
         for output_key, (output_type, workflow_filename) in self.outputs.items():
             sandbox_output_filepath = self.sandbox_file(output_key)
             # Optional outputs which were not requested
             if not sandbox_output_filepath: continue
             if output_type == 'file':
-                workflow_filepath = analysis_directory.joinpath(workflow_filename)
-                if not workflow_filepath.exists():
-                    raise FileNotFoundError(f'The workflow did not generate the expected output file {workflow_filepath}. '
-                        f'Check the workflow logs. Analysis directory content: {os.listdir(analysis_directory)}')
-                fu.log(f'Copy {workflow_filepath} --> {sandbox_output_filepath}', self.out_log, self.global_log)
-                shutil.copy(workflow_filepath, sandbox_output_filepath)
+                workflow_filepaths = glob(str(outputs_directory.joinpath(workflow_filename)))
+                if len(workflow_filepaths) == 0:
+                    raise FileNotFoundError(f'The workflow did not generate the expected output file {workflow_filename}. '
+                        f'Check the workflow logs. Outputs directory content: {os.listdir(outputs_directory)}')
+                if len(workflow_filepaths) > 1:
+                    raise RuntimeError(f'There are multiple files which could be the output {output_key}: {", ".join(workflow_filepaths)}')
+                fu.log(f'Copy {workflow_filepaths[0]} --> {sandbox_output_filepath}', self.out_log, self.global_log)
+                shutil.copy(workflow_filepaths[0], sandbox_output_filepath)
             elif output_type in ('zip', 'glob'):
                 pattern = '*' if output_type == 'zip' else workflow_filename
-                workflow_filepaths = sorted(glob(str(analysis_directory.joinpath(pattern))))
+                workflow_filepaths = sorted(glob(str(outputs_directory.joinpath(pattern))))
                 if len(workflow_filepaths) == 0:
-                    raise FileNotFoundError(f'The workflow did not generate any output file matching {pattern} in {analysis_directory}. '
+                    raise FileNotFoundError(f'The workflow did not generate any output file matching {pattern} in {outputs_directory}. '
                         'Check the workflow logs.')
                 fu.log(f'Zip {len(workflow_filepaths)} files --> {sandbox_output_filepath}', self.out_log, self.global_log)
                 fu.zip_list(sandbox_output_filepath, workflow_filepaths, self.out_log)
             else: raise ValueError(f'Unknown output type {output_type}')
 
     def run(self) -> None:
-        """Execute the MDDB workflow analysis."""
+        """Execute the MDDB workflow task of the block."""
 
         # The path to the sandbox as seen by the workflow: it runs in the sandbox (the container volume in containers)
         self.sandbox = '.'
@@ -148,15 +158,15 @@ class MddbAnalysis(BiobbObject):
         inputs_filepath = self._write_inputs_file()
 
         # Build the command line
-        # Use the 'faith' argument to always skip the processing and checking steps
-        # We asume all MDDB workflow analysis BioBBs are run after a input processing step
+        # The input processing has no input structure (it writes the processed one)
+        # Use the 'faith' argument to skip the processing and checking steps of inputs which are already processed
         self.cmd = [self.binary_path, 'run',
                     '-dir', self.sandbox,
                     '-i', self.flag,
                     '-top', input_topology_filepath,
-                    '-stru', input_structure_filepath,
+                    *(['-stru', input_structure_filepath] if input_structure_filepath else []),
                     '-md', REPLICA_DIRECTORY, input_trajectory_filepath,
-                    '--faith',
+                    *(['--faith'] if self.processed_inputs else []),
                     *self._get_extra_arguments()]
         if inputs_filepath:
             self.cmd += ['-inp', inputs_filepath]
