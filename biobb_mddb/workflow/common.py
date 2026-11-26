@@ -66,7 +66,6 @@ class MddbAnalysis(BiobbObject):
         # If the sandbox is disabled then input files are not copied, so we link the original file
         # Otherwise we rename the copy in the sandbox
         # Note that a link to the copy is not enough, since the workflow resolves links before checking names
-        # Note that in container runs the staged path is the internal container path, so we do not use it
         if self.disable_sandbox:
             safe_host_filepath.symlink_to(Path(original_filepath).resolve())
             self.tmp_files.append(str(safe_host_filepath))
@@ -141,10 +140,8 @@ class MddbAnalysis(BiobbObject):
     def run(self) -> None:
         """Execute the MDDB workflow analysis."""
 
-        # Set the path to the sandbox as seen by the workflow
-        self.sandbox = self.stage_io_dict['unique_dir']
-        if self.container_path:
-            self.sandbox = self.container_volume_path
+        # The path to the sandbox as seen by the workflow: it runs in the sandbox (the container volume in containers)
+        self.sandbox = '.'
 
         # Stage input files with safe names
         input_topology_filepath = self._stage_input('input_topology_filepath')
