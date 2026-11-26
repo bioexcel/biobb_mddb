@@ -106,6 +106,12 @@ jobs:
         # With its dependencies: biobb_common master can need packages that the version of .github/env.yaml lacks
         run: python -m pip install ./biobb_common
 
+      - name: Install biobb_mem 5.4.0
+        shell: bash -l {0}
+        # mddb_workflow imports biobb_mem: its released version does not run on biobb_common master.
+        # Branch release-5.4.0 until bioexcel/biobb_mem#8 is merged, then main
+        run: python -m pip install --no-deps git+https://github.com/bioexcel/biobb_mem.git@release-5.4.0
+
       - name: Run tests
         shell: bash -l {0}
         run: |
