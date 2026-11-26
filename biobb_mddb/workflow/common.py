@@ -18,8 +18,6 @@ BIOBB_INPUTS_FILENAME = 'biobb_mddb_inputs.json'
 # Prefix used to rename staged input files, so they never collide with workflow output filenames
 # e.g. an input named 'topology.prmtop' would be overwritten by the workflow output topology
 STAGED_INPUT_PREFIX = 'biobb_mddb_'
-# Workflow files and directories written in the project directory (relative to the sandbox)
-WORKFLOW_PROJECT_FILES = ['.mwf_cache.json', '.register.json', 'topology.*', REPLICA_DIRECTORY, 'incomplete_*']
 
 
 class MddbAnalysis(BiobbObject):
@@ -171,15 +169,16 @@ class MddbAnalysis(BiobbObject):
         fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
 
         # Run Biobb block
+        unique_dir = self.stage_io_dict['unique_dir']
+        previous_entries = set(os.listdir(unique_dir))
         self.run_biobb()
         if self.return_code != 0:
             raise RuntimeError(f'MDDB workflow failed with exit code {self.return_code}. Check the logs.')
 
-        # Move output files to the sandbox and then copy them to host
-        self._collect_outputs()
-
-        # Remove temporary file(s)
+        # Without sandbox the workflow writes in the current directory: remove what it added there, not the files that were already there
         # Note that the sandbox is already in the temporary files list unless the sandbox is disabled
         if self.disable_sandbox:
-            for pattern in WORKFLOW_PROJECT_FILES:
-                self.tmp_files.extend(glob(str(Path(self.stage_io_dict['unique_dir']).joinpath(pattern))))
+            self.tmp_files.extend(str(Path(unique_dir, entry)) for entry in sorted(set(os.listdir(unique_dir)) - previous_entries))
+
+        # Move output files to the sandbox and then copy them to host
+        self._collect_outputs()
