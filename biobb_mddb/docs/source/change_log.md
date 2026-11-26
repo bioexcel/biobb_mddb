@@ -17,6 +17,7 @@
 ### Fixed
 
 - `input_processing` passed `-fit` when `filter` was set instead of `fit`.
+- The documented default of `container_shell_path` was `/bin/bash` instead of `/bin/bash -c`.
 
 ## What's new in version [5.2.0](https://github.com/bioexcel/biobb_mddb/releases/tag/v5.2.0)?
 

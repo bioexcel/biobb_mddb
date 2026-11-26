@@ -208,7 +208,7 @@
                 },
                 "container_shell_path": {
                     "type": "string",
-                    "default": "/bin/bash",
+                    "default": "/bin/bash -c",
                     "wf_prop": false,
                     "description": "Path to the binary executable of the container shell."
                 }
