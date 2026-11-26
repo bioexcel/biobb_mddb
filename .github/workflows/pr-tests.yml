@@ -109,8 +109,9 @@ jobs:
       - name: Install biobb_mem 5.4.0
         shell: bash -l {0}
         # mddb_workflow imports biobb_mem: its released version does not run on biobb_common master.
-        # Branch release-5.4.0 until bioexcel/biobb_mem#8 is merged, then main
-        run: python -m pip install --no-deps git+https://github.com/bioexcel/biobb_mem.git@release-5.4.0
+        # Branch release-5.4.0 until bioexcel/biobb_mem#8 is merged, then main. Reinstalled: same version number
+        # as the conda biobb_mem (5.3.1), pip would keep that one
+        run: python -m pip install --no-deps --force-reinstall git+https://github.com/bioexcel/biobb_mem.git@release-5.4.0
 
       - name: Run tests
         shell: bash -l {0}
