@@ -2,6 +2,7 @@
 
 """Module containing the HydrogenBonds class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class HydrogenBonds(MddbAnalysis):
@@ -26,9 +27,8 @@ class HydrogenBonds(MddbAnalysis):
             * **container_path** (*str*) - (None) Path to the binary executable of your container.
             * **container_image** (*str*) - ("ghcr.io/mmb-irb/mddb_wf:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
-            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
+            * **container_shell_path** (*str*) - ("/bin/bash -c") Path to the binary executable of the container shell.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -71,49 +71,11 @@ class HydrogenBonds(MddbAnalysis):
                  output_analysis_zip_path: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_zip_path': output_analysis_zip_path,
-            }
-        }
-
-        # Properties specific for BB
-        self.interactions = properties.get('interactions', None)
-        self.md_type = properties.get('md_type', None)
-
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
+        super().__init__(**locals())
 
 
-def hydrogen_bonds(input_topology_filepath: str,
-                   input_structure_filepath: str,
-                   input_trajectory_filepath: str,
-                   output_analysis_zip_path: str,
-                   input_inputs_filepath: str | None = None,
-                   properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`HydrogenBonds <workflow.hydrogen_bonds.HydrogenBonds>` class and
-    execute the :meth:`launch() <workflow.hydrogen_bonds.HydrogenBonds.launch>` method."""
-    return HydrogenBonds(**dict(locals())).launch()
-
-
-hydrogen_bonds.__doc__ = HydrogenBonds.__doc__
-main = HydrogenBonds.get_main(hydrogen_bonds, 'Hydrogen bonds in the interface of every interaction.')
+hydrogen_bonds = launcher(HydrogenBonds)
 
 
 if __name__ == '__main__':
-    main()
+    HydrogenBonds.main()

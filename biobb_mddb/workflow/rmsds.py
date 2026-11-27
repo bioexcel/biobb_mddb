@@ -2,6 +2,7 @@
 
 """Module containing the Rmsds class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Rmsds(MddbAnalysis):
@@ -26,9 +27,8 @@ class Rmsds(MddbAnalysis):
             * **container_path** (*str*) - (None) Path to the binary executable of your container.
             * **container_image** (*str*) - ("ghcr.io/mmb-irb/mddb_wf:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
-            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
+            * **container_shell_path** (*str*) - ("/bin/bash -c") Path to the binary executable of the container shell.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -64,49 +64,11 @@ class Rmsds(MddbAnalysis):
                  output_analysis_filepath: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_filepath': output_analysis_filepath,
-            }
-        }
-
-        # Properties specific for BB
-        self.pbc_selection = properties.get('pbc_selection', None)
-        self.cg_selection = properties.get('cg_selection', None)
-
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
+        super().__init__(**locals())
 
 
-def rmsds(input_topology_filepath: str,
-          input_structure_filepath: str,
-          input_trajectory_filepath: str,
-          output_analysis_filepath: str,
-          input_inputs_filepath: str | None = None,
-          properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Rmsds <workflow.rmsds.Rmsds>` class and
-    execute the :meth:`launch() <workflow.rmsds.Rmsds.launch>` method."""
-    return Rmsds(**dict(locals())).launch()
-
-
-rmsds.__doc__ = Rmsds.__doc__
-main = Rmsds.get_main(rmsds, 'RMSD along the trajectory against the first frame and the average structure.')
+rmsds = launcher(Rmsds)
 
 
 if __name__ == '__main__':
-    main()
+    Rmsds.main()

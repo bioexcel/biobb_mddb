@@ -2,6 +2,7 @@
 
 """Module containing the Energies class and the command line interface."""
 from biobb_mddb.workflow.common import MddbAnalysis
+from biobb_common.generic.biobb_object import launcher
 
 
 class Energies(MddbAnalysis):
@@ -27,9 +28,8 @@ class Energies(MddbAnalysis):
             * **container_path** (*str*) - (None) Path to the binary executable of your container.
             * **container_image** (*str*) - ("ghcr.io/mmb-irb/mddb_wf:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
-            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
+            * **container_shell_path** (*str*) - ("/bin/bash -c") Path to the binary executable of the container shell.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -72,50 +72,11 @@ class Energies(MddbAnalysis):
                  output_analysis_zip_path: str,
                  input_inputs_filepath: str | None = None,
                  properties: dict | None = None, **kwargs) -> None:
-        properties = properties or {}
-
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
-
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_structure_filepath': input_structure_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-                'input_inputs_filepath': input_inputs_filepath,
-            },
-            'out': {
-                'output_analysis_zip_path': output_analysis_zip_path,
-            }
-        }
-
-        # Properties specific for BB
-        self.cg_selection = properties.get('cg_selection', None)
-        self.interactions = properties.get('interactions', None)
-        self.energies_engine = properties.get('energies_engine', 'cmip')
-
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
+        super().__init__(**locals())
 
 
-def energies(input_topology_filepath: str,
-             input_structure_filepath: str,
-             input_trajectory_filepath: str,
-             output_analysis_zip_path: str,
-             input_inputs_filepath: str | None = None,
-             properties: dict | None = None, **kwargs) -> int:
-    """Create :class:`Energies <workflow.energies.Energies>` class and
-    execute the :meth:`launch() <workflow.energies.Energies.launch>` method."""
-    return Energies(**dict(locals())).launch()
-
-
-energies.__doc__ = Energies.__doc__
-main = Energies.get_main(energies, 'Electrostatic and van der Waals energies in the interface of every interaction.')
+energies = launcher(Energies)
 
 
 if __name__ == '__main__':
-    main()
+    Energies.main()

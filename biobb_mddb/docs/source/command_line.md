@@ -55,9 +55,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_area_per_lipid.yml)
 ```python
@@ -137,9 +136,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_clusters.yml)
 ```python
@@ -214,9 +212,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_dihedral_energies.yml)
 ```python
@@ -292,9 +289,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_distance_per_residue.yml)
 ```python
@@ -372,9 +368,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_energies.yml)
 ```python
@@ -451,9 +446,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_helical_parameters.yml)
 ```python
@@ -530,9 +524,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_hydrogen_bonds.yml)
 ```python
@@ -608,9 +601,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_input_processing.yml)
 ```python
@@ -691,9 +683,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_lipid_interactions.yml)
 ```python
@@ -768,9 +759,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_lipid_order.yml)
 ```python
@@ -852,9 +842,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_markov.yml)
 ```python
@@ -929,9 +918,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_membrane_channels.yml)
 ```python
@@ -1006,9 +994,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_membrane_density.yml)
 ```python
@@ -1083,9 +1070,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_membrane_thickness.yml)
 ```python
@@ -1166,9 +1152,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_pca.yml)
 ```python
@@ -1247,9 +1232,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_pockets.yml)
 ```python
@@ -1325,9 +1309,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rgyr.yml)
 ```python
@@ -1404,9 +1387,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsd_pairwise.yml)
 ```python
@@ -1482,9 +1464,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsd_per_residue.yml)
 ```python
@@ -1581,9 +1562,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsds.yml)
 ```python
@@ -1659,9 +1639,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_rmsf.yml)
 ```python
@@ -1737,9 +1716,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_sasa.yml)
 ```python
@@ -1815,9 +1793,8 @@ Config parameters for this building block:
 * **container_path** (*string*): (None) Path to the binary executable of your container.
 * **container_image** (*string*): (ghcr.io/mmb-irb/mddb_wf:latest) Container Image identifier.
 * **container_volume_path** (*string*): (/data) Path to an internal directory in the container.
-* **container_working_dir** (*string*): (None) Path to the internal CWD in the container.
 * **container_user_id** (*string*): (None) User number id to be mapped inside the container.
-* **container_shell_path** (*string*): (/bin/bash) Path to the binary executable of the container shell.
+* **container_shell_path** (*string*): (/bin/bash -c) Path to the binary executable of the container shell.
 ### YAML
 #### [Common config file](https://github.com/bioexcel/biobb_mddb/blob/master/biobb_mddb/test/data/config/config_tmscores.yml)
 ```python

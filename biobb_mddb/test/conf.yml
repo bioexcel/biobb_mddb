@@ -166,7 +166,7 @@ pockets:
   paths:
     input_topology_filepath: file:test_data_dir/workflow/output_topology.prmtop
     input_structure_filepath: file:test_data_dir/workflow/output_structure.cif
-    input_trajectory_filepath: file:test_data_dir/workflow/output_trajectory.xtc
+    input_trajectory_filepath: file:test_data_dir/workflow/pockets_trajectory.xtc
     ref_output_analysis_filepath: file:test_reference_dir/workflow/ref_pockets.json
     output_analysis_filepath: pockets.json
     output_pockets_zip_path: pockets_pockets.zip

@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 
 """Module containing the InputProcessing class and the command line interface."""
-from biobb_common.generic.biobb_object import BiobbObject
-from biobb_common.tools import file_utils as fu
-from biobb_common.tools.file_utils import launchlogger
-from pathlib import PurePath
-from glob import glob
-import shutil
+from biobb_mddb.workflow.common import MddbAnalysis, REPLICA_DIRECTORY
+from biobb_common.generic.biobb_object import launcher
+from pathlib import Path
 
-# Set some input default values
-DEFAULT_OUTPUT_TRAJECTORY_FILENAME = 'trajectory.xtc'
-DEFAULT_OUTPUT_STRUCTURE_FILENAME = 'structure.cif'
+# Alias of the filter property for the default filtering of the workflow (water and counter ions)
 DEFAULT_FILTERING_ALIAS = 'def'
 
-class InputProcessing(BiobbObject):
+
+class InputProcessing(MddbAnalysis):
     """
     | biobb_mddb InputProcessing
     | Wrapper of the `Input processing steps from MDDB workflow <https://github.com/mmb-irb/MDDB-workflow/blob/master/mddb_workflow/tools/process_input_files.py>`_ module.
@@ -36,9 +32,8 @@ class InputProcessing(BiobbObject):
             * **container_path** (*str*) - (None)  Path to the binary executable of your container.
             * **container_image** (*str*) - ("ghcr.io/mmb-irb/mddb_wf:latest") Container Image identifier.
             * **container_volume_path** (*str*) - ("/data") Path to an internal directory in the container.
-            * **container_working_dir** (*str*) - (None) Path to the internal CWD in the container.
             * **container_user_id** (*str*) - (None) User number id to be mapped inside the container.
-            * **container_shell_path** (*str*) - ("/bin/bash") Path to the binary executable of the container shell.
+            * **container_shell_path** (*str*) - ("/bin/bash -c") Path to the binary executable of the container shell.
 
     Examples:
         This is a use example of how to use the building block from Python::
@@ -64,134 +59,33 @@ class InputProcessing(BiobbObject):
 
     """
 
+    flag = 'inpro'
+    # The inputs are raw files: the workflow processes and checks them
+    processed_inputs = False
+    # The processed topology is in the project directory, with the extension of its format, and the rest in the replica directory
+    outputs = {
+        'output_topology_filepath': ('file', 'topology.*'),
+        'output_trajectory_filepath': ('file', f'{REPLICA_DIRECTORY}/trajectory.xtc'),
+        'output_structure_filepath': ('file', f'{REPLICA_DIRECTORY}/structure.cif'),
+    }
+    cli_properties = {'filter': '-filt', 'image': '-img', 'fit': '-fit'}
+
     def __init__(self, input_topology_filepath: str, input_trajectory_filepath: str,
             output_topology_filepath: str, output_trajectory_filepath: str,
-            output_structure_filepath: str, properties=None, **kwargs) -> None:
-        properties = properties or {}
+            output_structure_filepath: str, properties: dict | None = None, **kwargs) -> None:
+        super().__init__(**locals())
 
-        # Call parent class constructor
-        super().__init__(properties)
-        self.locals_var_dict = locals().copy()
+    def prepare(self) -> None:
+        """Go from the 'def' filter alias to True: the workflow default filtering."""
+        if self.filter == DEFAULT_FILTERING_ALIAS: self.filter = True
 
-        # Modify to match constructor parameters
-        # Input/Output files
-        self.io_dict = {
-            'in': {
-                'input_topology_filepath': input_topology_filepath,
-                'input_trajectory_filepath': input_trajectory_filepath,
-            },
-            'out': {
-                'output_topology_filepath': output_topology_filepath,
-                'output_trajectory_filepath': output_trajectory_filepath,
-                'output_structure_filepath': output_structure_filepath,
-            }
-        }
-
-        # Properties specific for BB
-        self.filter = properties.get('filter', False)
-        self.image = properties.get('image', False)
-        self.fit = properties.get('fit', False)
-        self.binary_path = properties.get('binary_path', 'mwf')
-        self.properties = properties
-
-        # Check the properties
-        self.check_properties(properties)
-        # Check the arguments
-        self.check_arguments()
-
-    @launchlogger
-    def launch(self) -> int:
-        """Execute the :class:`InputProcessing <workflow.input_processing.InputProcessing>` object."""
-
-        # Setup Biobb
-        if self.check_restart():
-            return 0
-        self.stage_files()
-
-        # Parse filepaths
-        input_topology_filepath = self.stage_io_dict['in']['input_topology_filepath']
-        input_trajectory_filepath = self.stage_io_dict['in']['input_trajectory_filepath']
-
-        # Container paths
-        sandbox = self.stage_io_dict.get("unique_dir", "")
-        if self.container_path:
-            sandbox = self.container_volume_path
-
-        # Prepare the command line parameters as instructions list
-        instructions = []
-        if self.filter:
-            if self.filter == DEFAULT_FILTERING_ALIAS: instructions.append(f'-filt')
-            else: instructions.append(f'-filt "{self.filter}"')
-            fu.log('Appending optional boolean property', self.out_log, self.global_log)
-        if self.image:
-            instructions.append('-img')
-            fu.log('Appending optional boolean property', self.out_log, self.global_log)
-        if self.fit:
-            instructions.append('-fit')
-            fu.log('Appending optional boolean property', self.out_log, self.global_log)
-
-        # Build the actual command line as a list of items (elements order will be maintained)
-        replica_subdirectory = 'replica_1'
-        self.cmd = [(f'{self.binary_path} run -dir {sandbox} -i inpro -top {input_topology_filepath} '
-                     f'-md {replica_subdirectory} {input_trajectory_filepath}'), *instructions]
-        # DANI: Esto hace falta para los dockers, sino falla al borrar los archivos en /tmp
-        # DANI: Otra alternativa es poner el en conf.yml 'remove_tmp: false'
-        if self.container_path:
-           self.cmd.append('; chmod a+w -R ' + str(PurePath(sandbox).joinpath(replica_subdirectory)))
-        fu.log('Creating command line with instructions and required arguments', self.out_log, self.global_log)
-
-        # Run Biobb block
-        self.run_biobb()
-        if self.return_code != 0:
-            raise RuntimeError(f'MDDB workflow failed with exit code {self.return_code}. Check the logs.')
-
-        # Make sure there is only one possible output topology file
-        output_topology_glob = glob(str(PurePath(self.stage_io_dict['unique_dir']).joinpath('topology.*')))
-        if len(output_topology_glob) == 0:
-            raise FileNotFoundError('The expected output topology file is nowhere to be found')
-        if len(output_topology_glob) > 1:
-            raise RuntimeError(f'There are multiple files which could be the output topology: {", ".join(output_topology_glob)}')
-        expected_output_topology_filename = output_topology_glob[0].split('/')[-1]
-
-        # Move output files to the expected location
-        expected_output_filepaths = {
-            self.io_dict['out']['output_topology_filepath']: expected_output_topology_filename,
-            self.io_dict['out']['output_trajectory_filepath'] or '': f'{replica_subdirectory}/{DEFAULT_OUTPUT_TRAJECTORY_FILENAME}',
-            self.io_dict['out']['output_structure_filepath']: f'{replica_subdirectory}/{DEFAULT_OUTPUT_STRUCTURE_FILENAME}',
-        }
-        for output_filepath, expected_output_filepath in expected_output_filepaths.items():
-            absolute_filepath = str(PurePath(self.stage_io_dict['unique_dir']).joinpath(expected_output_filepath))
-            fu.log(f"copy {absolute_filepath} {output_filepath}", self.out_log, self.global_log)
-            shutil.copy(absolute_filepath, output_filepath)
-
-        # Copy files to host
-        self.copy_to_host()
-
-        # Remove temporary file(s)
-        if self.disable_sandbox and self.remove_tmp:
-            self.tmp_files.extend([replica_subdirectory, "topology.prmtop"])
-        self.remove_tmp_files()
-
-        # Check output arguments
-        self.check_arguments(output_files_created=True, raise_exception=False)
-
-        return self.return_code
+    def _outputs_directory(self) -> Path:
+        """Go from the sandbox to the directory of the processed files: the project directory."""
+        return Path(self.stage_io_dict['unique_dir'])
 
 
-def input_processing(input_trajectory_filepath: str, input_topology_filepath: str = None,
-                    output_topology_filepath: str = None, output_trajectory_filepath: str = None,
-                    output_structure_filepath: str = None, properties: dict | None = None,
-                     **kwargs) -> int:
-    """Create :class:`Workflow <workflow.input_processing.InputProcessing>` class and
-    execute the :meth:`launch() <workflow.input_processing.InputProcessing.launch>` method."""
-    return InputProcessing(**dict(locals())).launch()
-
-
-input_processing.__doc__ = InputProcessing.__doc__
-main = InputProcessing.get_main(input_processing, 'Process raw input files using the MDDB workflow.')
+input_processing = launcher(InputProcessing)
 
 
 if __name__ == '__main__':
-    main()
-
-# 12. Complete documentation strings
+    InputProcessing.main()

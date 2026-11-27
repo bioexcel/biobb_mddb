@@ -11,10 +11,13 @@
 
 - Analysis blocks share a common base class (`workflow/common.py`) and expect the processed mmCIF structure (`.cif`) written by current MDDB workflow versions.
 - `input_processing` writes the output structure in mmCIF format.
+- `input_processing` runs the workflow like the analysis blocks: an input topology named like the processed one (`topology.*`) no longer makes it fail, and paths with spaces or a `filter` selection with quotes are passed correctly.
+- With `disable_sandbox`, the blocks remove what the workflow added to the working directory and nothing else.
 
 ### Fixed
 
 - `input_processing` passed `-fit` when `filter` was set instead of `fit`.
+- The documented default of `container_shell_path` was `/bin/bash` instead of `/bin/bash -c`.
 
 ## What's new in version [5.2.0](https://github.com/bioexcel/biobb_mddb/releases/tag/v5.2.0)?
 
